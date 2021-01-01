@@ -5,6 +5,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,12 +30,14 @@ namespace API.Controllers
         }
 
         [HttpGet("products/")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return await _context.Products.ToListAsync();
         }
 
         [HttpGet("product/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -48,6 +51,7 @@ namespace API.Controllers
         }
 
         [HttpPut("product/{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateProduct( int id, [FromForm] ProductDto productDto)
         {
             var product = await _context.Products.FindAsync(id);
@@ -65,6 +69,7 @@ namespace API.Controllers
         }
 
         [HttpPost("product")]
+        [Authorize]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
 
@@ -75,6 +80,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("product/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
