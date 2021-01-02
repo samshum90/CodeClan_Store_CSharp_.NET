@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace API.Entities
 {
     [Table("Orders")]
-    public class order
+    public class Order
     {
         public int Id { get; set; }
         public DateTime OderDate { get; set; }

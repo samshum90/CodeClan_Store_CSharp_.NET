@@ -10,6 +10,7 @@ namespace API.Helpers
         {
             CreateMap<ProductDto, Product>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<RegisterDto, AppUser>();
         }
     }
 }

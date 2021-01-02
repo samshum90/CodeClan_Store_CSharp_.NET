@@ -3,14 +3,16 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210101211446_Admin")]
+    partial class Admin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,6 +77,9 @@ namespace API.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Gender")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastActive")
                         .HasColumnType("TEXT");
 
@@ -95,8 +100,11 @@ namespace API.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("TEXT");
@@ -134,9 +142,14 @@ namespace API.Data.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserId1")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -277,9 +290,15 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Entities.AppUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,32 +16,28 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductsController(DataContext context, IMapper mapper)
+        public ProductsController(IMapper mapper, IProductRepository productRepository, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _context = context;
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("products/")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _unitOfWork.ProductRepository.GetProductsAsync();
+            return Ok(products);
         }
 
-        [HttpGet("product/{id}")]
+        [HttpGet("product/{productname}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct(string productname)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productname);
 
             if (product == null)
             {
@@ -54,17 +51,19 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult> UpdateProduct( int id, [FromForm] ProductDto productDto)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(id);
             if (product == null)
             {
                 return  NotFound();
             }
 
             _mapper.Map(productDto, product);
-            _context.Entry(product).State = EntityState.Modified;
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-            return Ok(product);
+
+            _unitOfWork.ProductRepository.Update(product);
+
+            if (await _unitOfWork.Complete()) return NoContent();
+            
+            return BadRequest("Failed to update product");
             
         }
 
@@ -73,26 +72,26 @@ namespace API.Controllers
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            _unitOfWork.ProductRepository.AddProduct(product);
+            if (await _unitOfWork.Complete()) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
 
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            return BadRequest("Failed to add product");
         }
 
         [HttpDelete("product/{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            _unitOfWork.ProductRepository.DeleteProduct(product);
+            if (await _unitOfWork.Complete()) return Ok();
 
-            return Ok();
+            return BadRequest("Failed to Delete product");
         }
     }
 }

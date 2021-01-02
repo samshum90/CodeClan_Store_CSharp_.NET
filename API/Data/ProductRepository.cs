@@ -39,5 +39,13 @@ namespace API.Data
             return await _context.Products
                 .SingleOrDefaultAsync(x => x.Name == name);
         }
+        public void AddProduct(Product product)
+        {
+            _context.Products.Add(product);
+        }
+        public void DeleteProduct(Product product)
+        {
+            _context.Products.Remove(product);
+        }
     }
 }
