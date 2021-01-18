@@ -15,6 +15,7 @@ namespace API.Data
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderedProducts> OrderedProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -30,6 +31,10 @@ namespace API.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            builder.Entity<OrderedProducts>()
+                .HasKey(op => new { op.OrderId, op.ProductId });
+
         }
     }
 }

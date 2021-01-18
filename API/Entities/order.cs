@@ -8,9 +8,10 @@ namespace API.Entities
     public class Order
     {
         public int Id { get; set; }
-        public DateTime OderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public string status { get; set; }
         public AppUser AppUser { get; set; }
+        public int AppUserId { get; set; }
         public ICollection<Product> Products { get; set; }
     }
 }
