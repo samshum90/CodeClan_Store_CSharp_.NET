@@ -19,7 +19,7 @@ namespace API.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductsController(IMapper mapper, IProductRepository productRepository, IUnitOfWork unitOfWork)
+        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

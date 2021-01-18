@@ -8,6 +8,7 @@ namespace API.Entities
     public class Order
     {
         public int Id { get; set; }
+        public DateTime OrderCreated { get; set; } = DateTime.Now;
         public DateTime OrderDate { get; set; }
         public string status { get; set; }
         public AppUser AppUser { get; set; }
