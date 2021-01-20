@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetProduct(int id)
+        public async Task<ActionResult<OrderDto>> GetProduct(int id)
         {
  
             var order= await _unitOfWork.OrderRepository.GetOrderByIdAsync(id);
@@ -42,18 +43,24 @@ namespace API.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult<OrderDto>> CreateBasket(BasketDto basket)
+        public async Task<ActionResult<OrderDto>> CreateBasket([FromBody] ProductDto productDto)
         {
             var userId = User.GetUserId();
-            var appUser = _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
             
-            order = new Order
+            var order = new Order
             {
-
+                Status = "Started",
+                AppUser = appUser,
+                AppUserId = userId,
             };
 
-            _unitOfWork.OrderRepository.CreateOrder(basket);
-            if (await _unitOfWork.Complete()) return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productDto.Name);
+            order.Products.Add(product);
+
+            _unitOfWork.OrderRepository.CreateOrder(order);
+
+            if (await _unitOfWork.Complete()) return Ok();
 
             return BadRequest("Failed to create basket");
         }

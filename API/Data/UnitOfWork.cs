@@ -14,7 +14,7 @@ namespace API.Data
             _context = context;
         }
 
-        public IUserRepository UserRepository => new UserRepository(_context, _mapper);
+        public IUserRepository UserRepository => new UserRepository(_context);
         public IProductRepository ProductRepository => new ProductRepository(_context, _mapper);
         public IOrderRepository OrderRepository => new OrderRepository(_context, _mapper);
 

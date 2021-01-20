@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -21,7 +23,7 @@ namespace API.Data
 
         public void CreateOrder(Order order)
         {
-            _context.Entry(order).State = EntityState.Modified;
+             _context.Orders.Add(order);
         }
 
         public void DeleteOrder(Order order)
@@ -29,26 +31,40 @@ namespace API.Data
             _context.Orders.Remove(order);
         }
 
-        public async Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId)
+        public async Task<OrderDto> GetOrderByIdAsync(int id)
         {
-            return await _context.Orders
-                .Where( o => o.AppUserId == appUserId)
-                .ToListAsync();
+            var order = await _context.Orders
+                .Include(o => o.Products)
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            return order;
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id)
+        public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
-            return await _context.Orders.FindAsync(id);
+            var orders = await _context.Orders
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return orders;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        
+        public async Task<IEnumerable<OrderDto>> GetOrderByAppUserIdAsync(int appUserId)
         {
-            return await _context.Orders
+            var orders = await _context.Orders
+                .Where(o => o.AppUserId == appUserId)
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+
+            return orders;
+
         }
 
         public void Update(Order order)
         {
-            _context.Entry(order).State = EntityState.Modified; }
+            _context.Entry(order).State = EntityState.Modified;
+        }
+
     }
 }

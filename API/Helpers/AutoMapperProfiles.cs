@@ -8,8 +8,9 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<ProductDto, Product>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<ProductDto, Product>();
+            CreateMap<Product, ProductDto>();
+            CreateMap<Order, OrderDto>();
             CreateMap<RegisterDto, AppUser>();
         }
     }
