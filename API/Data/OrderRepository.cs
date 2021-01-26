@@ -21,6 +21,19 @@ namespace API.Data
             _mapper = mapper;
         }
 
+        public void CreateOrderedProducts(OrderedProducts orderedProducts)
+        {
+             _context.OrderedProducts.Add(orderedProducts);
+        }
+        public async Task<OrderedProducts> GetOrderedProductsByProductIdAsync(int productId)
+        {
+            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId);
+        }
+        public async Task<OrderedProducts> GetOrderedProductsByProductIdAndOrderIdAsync(int productId, int orderId)
+        {
+            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId && x.OrderId == orderId);
+        }
+
         public void CreateOrder(Order order)
         {
              _context.Orders.Add(order);
@@ -40,7 +53,8 @@ namespace API.Data
         public async Task<OrderDto> GetOrderDtoByIdAsync(int id)
         {
             var order = await _context.Orders
-                .Include(o => o.Products)
+                .Include(o => o.OrderedProducts)
+                .ThenInclude(p => p.Product)
                 .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Id == id);
             return order;
@@ -58,6 +72,8 @@ namespace API.Data
         {
             var orders = await _context.Orders
                 .Where(o => o.AppUserId == appUserId)
+                .Include(o => o.OrderedProducts)
+                .ThenInclude(p => p.Product)
                 .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -68,16 +84,19 @@ namespace API.Data
         {
             var order = await _context.Orders
                 .Where(o => o.AppUserId == appUserId)
-                .Include(p => p.Products)
+                .Include(o => o.OrderedProducts)
                 .ToListAsync();
 
             return order;
 
         }
-
         public void Update(Order order)
         {
             _context.Entry(order).State = EntityState.Modified;
+        }
+        public void UpdateOrderedProducts (OrderedProducts  orderedProducts )
+        {
+            _context.Entry(orderedProducts).State = EntityState.Modified;
         }
 
     }

@@ -75,8 +75,14 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            order.Products.Add(product);
 
+            OrderedProducts orderedProducts = new OrderedProducts
+            {
+                Order = order,
+                Product = product,
+                Quantity = 1
+            };
+            _unitOfWork.OrderRepository.CreateOrderedProducts( orderedProducts);
             if (await _unitOfWork.Complete()) return Ok();
 
             return BadRequest("Failed to create basket");
@@ -104,13 +110,32 @@ namespace API.Controllers
             var order = orders.SingleOrDefault(o => o.Status == "Open");
             if (order == null) return NotFound("Failed to find an open order");
 
-            var item = order.Products.SingleOrDefault(p => p.Id == itemId);
+            var item = order.OrderedProducts.SingleOrDefault(p => p.ProductId == itemId);
             if (item == null) return NotFound("Failed to find item in order");
 
-            order.Products.Remove(item);
+            order.OrderedProducts.Remove(item);
 
             if (await _unitOfWork.Complete()) return Ok();
             return BadRequest("Failed to remove the item from order");
+        }
+
+        [HttpPut("edit-item/{itemId}")]
+        public async Task<ActionResult> UpdateProductsInOrder( int itemId, [FromBody] QuantityDto quantityDto)
+        {
+            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(User.GetUserId());
+            var order = orders.SingleOrDefault(o => o.Status == "Open");
+            if (order == null) return NotFound("Failed to find an open order");
+
+            var orderedProducts = await _unitOfWork.OrderRepository.GetOrderedProductsByProductIdAndOrderIdAsync(itemId, order.Id);
+             if (orderedProducts == null) return NotFound("Failed to find an ordered product");
+
+            _mapper.Map(quantityDto, orderedProducts );
+
+
+            if (await _unitOfWork.Complete()) return NoContent();
+            
+            return BadRequest("Failed to update products in order");
+            
         }
     }
 

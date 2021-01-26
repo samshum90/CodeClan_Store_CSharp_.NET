@@ -10,6 +10,6 @@ namespace API.DTOs
         public DateTime OrderCreated { get; set; } = DateTime.Now;
         public DateTime OrderDate { get; set; } 
         public string Status { get; set; } 
-        public ICollection<ProductDto> Products { get; set; } = new List<ProductDto>();
+        public ICollection<OrderedProductsDto> OrderedProducts { get; set; }
     }
 }

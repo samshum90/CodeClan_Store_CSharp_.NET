@@ -13,6 +13,6 @@ namespace API.Entities
         public string Status { get; set; }
         public AppUser AppUser { get; set; }
         public int AppUserId { get; set; }
-        public ICollection<Product> Products { get; set; }  = new List<Product>();
+        public virtual ICollection<OrderedProducts> OrderedProducts { get; set; }  = new List<OrderedProducts>();
     }
 }

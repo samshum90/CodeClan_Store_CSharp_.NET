@@ -13,6 +13,8 @@ namespace API.Helpers
             CreateMap<Order, OrderDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<EditOrderDto, Order>();
+            CreateMap<OrderedProducts, OrderedProductsDto>();
+            CreateMap<QuantityDto, OrderedProducts>();
         }
     }
 }
