@@ -135,7 +135,22 @@ namespace API.Controllers
             if (await _unitOfWork.Complete()) return NoContent();
             
             return BadRequest("Failed to update products in order");
+
+        }
+        [HttpPut("complete/{id}")]
+         public async Task<ActionResult> CompleteOrder( int id)
+        {
+            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(User.GetUserId());
+            var order = orders.SingleOrDefault(o => o.Status == "Open");
+            if (order == null) return NotFound("Failed to find an open order");
+
+            order.OrderDate = DateTime.Now;
+            order.Status = "Ordered";
+
+            if (await _unitOfWork.Complete()) return NoContent();
             
+            return BadRequest("Failed to update products in order");
+
         }
     }
 
