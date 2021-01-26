@@ -31,7 +31,13 @@ namespace API.Data
             _context.Orders.Remove(order);
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            return order;
+        }
+
+        public async Task<OrderDto> GetOrderDtoByIdAsync(int id)
         {
             var order = await _context.Orders
                 .Include(o => o.Products)
@@ -48,9 +54,7 @@ namespace API.Data
 
             return orders;
         }
-
-        
-        public async Task<IEnumerable<OrderDto>> GetOrderByAppUserIdAsync(int appUserId)
+        public async Task<IEnumerable<OrderDto>> GetOrdersByAppUserIdAsync(int appUserId)
         {
             var orders = await _context.Orders
                 .Where(o => o.AppUserId == appUserId)
@@ -58,6 +62,16 @@ namespace API.Data
                 .ToListAsync();
 
             return orders;
+
+        }
+        public async Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId)
+        {
+            var order = await _context.Orders
+                .Where(o => o.AppUserId == appUserId)
+                .Include(p => p.Products)
+                .ToListAsync();
+
+            return order;
 
         }
 

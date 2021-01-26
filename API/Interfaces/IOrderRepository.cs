@@ -9,8 +9,10 @@ namespace API.Interfaces
     {
         void Update(Order order);
         Task<IEnumerable<OrderDto>> GetOrdersAsync();
-        Task<OrderDto> GetOrderByIdAsync(int id);
-        Task<IEnumerable<OrderDto>> GetOrderByAppUserIdAsync(int appUserId);
+        Task<Order> GetOrderByIdAsync(int id);
+        Task<OrderDto> GetOrderDtoByIdAsync(int id);
+        Task<IEnumerable<OrderDto>> GetOrdersByAppUserIdAsync(int appUserId);
+        Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId);
         void CreateOrder(Order order);
         void DeleteOrder(Order order);
     }
