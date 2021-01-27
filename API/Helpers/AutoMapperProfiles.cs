@@ -12,10 +12,11 @@ namespace API.Helpers
             CreateMap<Product, ProductDto>();
             CreateMap<Order, OrderDto>();
             CreateMap<RegisterDto, AppUser>();
-            CreateMap<EditOrderDto, Order>();
             CreateMap<OrderedProducts, OrderedProductsDto>();
             CreateMap<QuantityDto, OrderedProducts>();
             CreateMap<ProductPhoto, ProductPhotoDto>();
+            CreateMap<Order, AdminOrderDto>();
+            CreateMap<MemberDto, AppUser>().ReverseMap();
         }
     }
 }

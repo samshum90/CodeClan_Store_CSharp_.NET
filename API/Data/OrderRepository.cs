@@ -59,11 +59,20 @@ namespace API.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
             return order;
         }
+        public async Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderedProducts)
+                .ThenInclude(p => p.Product)
+                .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(x => x.Id == id);
+            return order;
+        }
 
-        public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
+        public async Task<IEnumerable<AdminOrderDto>> GetOrdersAsync()
         {
             var orders = await _context.Orders
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return orders;
