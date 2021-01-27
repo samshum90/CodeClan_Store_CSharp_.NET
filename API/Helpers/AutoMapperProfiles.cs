@@ -15,6 +15,7 @@ namespace API.Helpers
             CreateMap<EditOrderDto, Order>();
             CreateMap<OrderedProducts, OrderedProductsDto>();
             CreateMap<QuantityDto, OrderedProducts>();
+            CreateMap<ProductPhoto, ProductPhotoDto>();
         }
     }
 }

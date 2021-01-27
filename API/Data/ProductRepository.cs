@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -20,19 +23,24 @@ namespace API.Data
         {
             _context.Entry(product).State = EntityState.Modified;
         }
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         {
             return await _context.Products
+                .Include(p => p.Photos)
+                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                .Include(p => p.Photos)
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Product> GetProductByNameAsync(string name)
         {
             return await _context.Products
+                .Include(p => p.Photos)
                 .SingleOrDefaultAsync(x => x.Name == name);
         }
         public void AddProduct(Product product)
@@ -42,6 +50,13 @@ namespace API.Data
         public void DeleteProduct(Product product)
         {
             _context.Products.Remove(product);
+        }
+        public async Task<Product> GetProductByPhotoIdAsync(int id)
+        {
+            return await _context.Products
+                .Include(p => p.Photos)
+                .Where(p => p.Photos.Any(x => x.Id == id))
+                .FirstOrDefaultAsync();
         }
     }
 }
