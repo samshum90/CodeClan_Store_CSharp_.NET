@@ -8,8 +8,7 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<ProductDto, Product>();
-            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>().ReverseMap();
             CreateMap<Order, OrderDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<OrderedProducts, OrderedProductsDto>();

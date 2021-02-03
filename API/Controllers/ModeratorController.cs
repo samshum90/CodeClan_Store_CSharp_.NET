@@ -127,7 +127,7 @@ namespace API.Controllers
 
             if (await _unitOfWork.Complete())
             {
-                return CreatedAtRoute("GetProduct", new { productname = product.Name }, _mapper.Map<ProductPhotoDto>(photo));
+                return CreatedAtRoute("GetProduct", new { id = itemId }, _mapper.Map<ProductPhotoDto>(photo));
             }
 
 
