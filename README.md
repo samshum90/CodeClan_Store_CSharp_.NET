@@ -1,1 +1,1 @@
-# CodeClan Store
+# Noodle Store
