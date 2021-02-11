@@ -1,0 +1,57 @@
+<nav class="nav">
+    <div class="nav__logo">
+        <a routerLink='/'>
+            <img class="nav__logo-img" src="../../assets/noodleLogo.png" alt="Noodle Logo" />
+        </a>
+        <div class="nav__logo-text">
+            <h1>Oodles of Noodles</h1>
+            <h2>Authentic World Noodle Bar</h2>
+        </div>
+    </div>
+    <ul class="nav__bar">
+        <li class="nav__bar-item">
+            <a class="nav__bar-link" routerLink='/'>
+                <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false" aria-label="Home icon">
+                    home
+                </mat-icon>
+                <span class="nav__bar-link-text">HOME</span>
+            </a>
+        </li>
+        <li class="nav__bar-item">
+            <a class="nav__bar-link" routerLink='/account'>
+                <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
+                    aria-label="Account icon">
+                    person
+                </mat-icon>
+                <span class="nav__bar-link-text">ACCOUNT</span>
+            </a>
+        </li>
+
+        <li class="nav__bar-item" *ngIf="loggedIn">
+            <a class="nav__bar-link" (click)="logout()">
+                <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
+                    aria-label="Account icon">
+                    logout
+                </mat-icon>
+                <span class="nav__bar-link-text">LOGOUT</span>
+            </a>
+        </li>
+        <li class="nav__bar-item" *ngIf="!loggedIn">
+            <a class="nav__bar-link" (click)="login()">
+                <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
+                    aria-label="Account icon">
+                    login
+                </mat-icon>
+                <span class="nav__bar-link-text">LOGIN</span>
+            </a>
+        </li>
+        <li class="nav__bar-item">
+            <a class="nav__bar-link" routerLink='/basket'>
+                <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
+                    aria-label="Account icon">
+                    shopping_bag
+                </mat-icon>
+            </a>
+        </li>
+    </ul>
+</nav>
