@@ -1,0 +1,25 @@
+@import "../../styles/styles.scss";
+
+.sideBasket {
+  border-left: 1px solid $secondary-text-color;
+  width: $sideBar-width;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: $header-height;
+  right: 0;
+  overflow-x: hidden;
+  // padding-top: 20px;
+  &__logo {
+    padding: 5rem;
+    &-text {
+      width: 100%;
+      color: $ternary-text-color;
+      font-size: 1.15em;
+      text-align: center;
+    }
+    &-icon {
+      fill: $ternary-text-color;
+    }
+  }
+}
