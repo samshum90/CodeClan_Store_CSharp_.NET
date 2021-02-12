@@ -1,0 +1,12 @@
+@import "../../../styles/styles.scss";
+
+.productList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: $ternary-color;
+  width: $body-width;
+  padding: 2.5em;
+  gap: 2.5em;
+  justify-items: center;
+  align-items: center;
+}

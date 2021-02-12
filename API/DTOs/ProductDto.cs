@@ -6,6 +6,7 @@ namespace API.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string PhotoUrl { get; set; }
         public string ProductPrice { get; set; }
         public string SalePrice { get; set; }
         public string Description { get; set; }

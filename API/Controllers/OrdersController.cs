@@ -69,7 +69,7 @@ namespace API.Controllers
                     };
                  _unitOfWork.OrderRepository.CreateOrder(order);
             }
-            var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productDto.Name);
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productDto.Id);
 
             if (product == null)
             {

@@ -1,0 +1,39 @@
+@import "../../../styles/styles.scss";
+
+.productCard {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: $body-background-color;
+  padding: 10px;
+  &__content {
+    padding: 0 30px;
+    &-des {
+      color: $secondary-text-color;
+      height: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 5px 0;
+    }
+  }
+  &__image {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+  }
+
+  &__info {
+    &-title {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      &-text {
+        font-weight: bold;
+      }
+      &-price {
+        color: $theme-color;
+      }
+    }
+  }
+}

@@ -9,13 +9,18 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component';
 import { SideBasketComponent } from './side-basket/side-basket.component';
+import { ProductListComponent } from './products/product-list/product-list.component';
+import { ProductCardComponent } from './products/product-card/product-card.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavComponent,
-    SideBasketComponent
+    SideBasketComponent,
+    ProductListComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,
@@ -23,6 +28,7 @@ import { SideBasketComponent } from './side-basket/side-basket.component';
     AppRoutingModule,
     MatIconModule,
     AngularSvgIconModule.forRoot(),
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

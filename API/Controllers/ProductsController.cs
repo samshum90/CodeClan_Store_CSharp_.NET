@@ -29,14 +29,14 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
             var products = await _unitOfWork.ProductRepository.GetProductsAsync();
             return Ok(products);
         }
 
         [HttpGet("{productname}")]
-        public async Task<ActionResult<Product>> GetProduct(string productname)
+        public async Task<ActionResult<ProductDto>> GetProduct(string productname)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productname);
 

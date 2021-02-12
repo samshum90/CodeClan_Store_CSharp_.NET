@@ -1,6 +1,7 @@
 @import "../../styles/styles.scss";
 
 .sideBasket {
+  background-color: $body-background-color;
   border-left: 1px solid $secondary-text-color;
   width: $sideBar-width;
   height: 100%;
@@ -11,7 +12,7 @@
   overflow-x: hidden;
   // padding-top: 20px;
   &__logo {
-    padding: 5rem;
+    padding: 5rem 3rem;
     &-text {
       width: 100%;
       color: $ternary-text-color;

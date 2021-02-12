@@ -1922,11 +1922,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/samuelshum/Documents/Code/CodeClan_Store/API/API.csproj",
+      "projectUniqueName": "/Users/samuelshum/Documents/Code/Noodle_Store/API/API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/samuelshum/Documents/Code/CodeClan_Store/API/API.csproj",
+      "projectPath": "/Users/samuelshum/Documents/Code/Noodle_Store/API/API.csproj",
       "packagesPath": "/Users/samuelshum/.nuget/packages/",
-      "outputPath": "/Users/samuelshum/Documents/Code/CodeClan_Store/API/obj/",
+      "outputPath": "/Users/samuelshum/Documents/Code/Noodle_Store/API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/samuelshum/.nuget/NuGet/NuGet.Config"

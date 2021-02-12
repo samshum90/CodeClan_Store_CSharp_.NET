@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3x1BkF97TM3VX0ub0UR0klw3HJ7gaJjhvuZiwTikbilYyZ6Gj/rlYMOrrFcxtng9Ze2if7YVmxg5jJCihMfy6w==",
+  "dgSpecHash": "FgBWFTYwaqDF4iJ+ARZBP7Ir7om/xIhQX4vhEcFMAtOlfloY79pazXFL+GMxRcTb+l6EDoOaf3RIF0Je/ACOSg==",
   "success": true,
-  "projectFilePath": "/Users/samuelshum/Documents/Code/CodeClan_Store/API/API.csproj",
+  "projectFilePath": "/Users/samuelshum/Documents/Code/Noodle_Store/API/API.csproj",
   "expectedPackageFiles": [
     "/Users/samuelshum/.nuget/packages/automapper/10.1.0/automapper.10.1.0.nupkg.sha512",
     "/Users/samuelshum/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/8.1.0/automapper.extensions.microsoft.dependencyinjection.8.1.0.nupkg.sha512",

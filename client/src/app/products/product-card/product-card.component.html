@@ -1,0 +1,13 @@
+<mat-card class="productCard">
+    <img class="productCard__image" src={{product.photoUrl}} alt={{product.name}} />
+    <div class="productCard__content">
+        <div class="productCard__info-title">
+            <span class="productCard__info-title-text">{{product.name}}</span>
+
+            <span class="productCard__info-title-price">£{{product.productPrice}}</span>
+        </div>
+        <p class="productCard__content-des">
+            {{product.description}}
+        </p>
+    </div>
+</mat-card>

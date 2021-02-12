@@ -5,6 +5,7 @@ $ternary-text-color: #c4c4c4;
 $theme-color: #c92e2f;
 $secondary-color: #ffd800;
 $ternary-color: #f9f9f9;
+$body-background-color: #ffffff;
 
 //--- FONTS ---
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -14,5 +15,6 @@ $text-font: "Roboto", Arial, sans-serif;
 $content-width: 960px;
 $header-height: 90px;
 $footer-height: 90px;
-$sideBar-width: 30vw;
+$sideBar-width: 25vw;
+$body-width: 75vw;
 $font-size: 1.2rem;
