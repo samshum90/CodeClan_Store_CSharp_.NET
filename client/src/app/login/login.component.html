@@ -1,0 +1,41 @@
+<div class="login">
+    <mat-card class="login__card">
+        <mat-card-header class="login__card-header">
+            <mat-card-title class="login__card-header-title">Log In</mat-card-title>
+            <mat-card-subtitle class="login__card-header-sub">New Here?
+                <a routerLink='/'>
+                    Create an account
+                </a>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <img class="login__card-logo" mat-card-image src="../../assets/noodleLogo.png"
+            alt="Photo of a Oodles of noodles logo">
+        <mat-divider></mat-divider>
+        <form #loginForm="ngForm" class="login__card-form" (ngSubmit)="login()" autocomplete="off">
+            <mat-card-content class="login__card-content">
+                <mat-form-field>
+                    <mat-label for="username">Username:</mat-label>
+                    <input matInput name="username" [(ngModel)]="model.username" class="" type="text"
+                        placeholder="Username" required>
+                    <button mat-button *ngIf="model.username" matSuffix mat-icon-button aria-label="Clear"
+                        (click)="model.username=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label for="password">Password:</mat-label>
+                    <input matInput name="password" [(ngModel)]="model.password" class="" type="password"
+                        placeholder="Password" required>
+                    <button mat-button *ngIf="model.password" matSuffix mat-icon-button aria-label="Clear"
+                        (click)="model.password=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+                <button class="login__card-button" mat-raised-button color="primary" type="submit">Login</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

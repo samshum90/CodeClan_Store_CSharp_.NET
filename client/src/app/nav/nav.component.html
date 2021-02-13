@@ -17,7 +17,7 @@
                 <span class="nav__bar-link-text">HOME</span>
             </a>
         </li>
-        <li class="nav__bar-item">
+        <li class="nav__bar-item" *ngIf="(accountService.currentUser$ | async) as user">
             <a class="nav__bar-link" routerLink='/account'>
                 <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
                     aria-label="Account icon">
@@ -27,7 +27,7 @@
             </a>
         </li>
 
-        <li class="nav__bar-item" *ngIf="loggedIn">
+        <li class="nav__bar-item" *ngIf="(accountService.currentUser$ | async) as user">
             <a class="nav__bar-link" (click)="logout()">
                 <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
                     aria-label="Account icon">
@@ -36,8 +36,9 @@
                 <span class="nav__bar-link-text">LOGOUT</span>
             </a>
         </li>
-        <li class="nav__bar-item" *ngIf="!loggedIn">
-            <a class="nav__bar-link" (click)="login()">
+        <li class="nav__bar-item" *ngIf="
+        (accountService.currentUser$ | async) === undefined || (accountService.currentUser$ | async) === null">
+            <a class="nav__bar-link" routerLink='/login'>
                 <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
                     aria-label="Account icon">
                     login
