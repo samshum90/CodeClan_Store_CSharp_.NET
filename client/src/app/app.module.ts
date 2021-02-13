@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +13,9 @@ import { SideBasketComponent } from './side-basket/side-basket.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ProductCardComponent } from './products/product-card/product-card.component';
 import { MatCardModule } from '@angular/material/card';
+import { ProductDetailComponent } from './products/product-detail/product-detail.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -20,16 +24,21 @@ import { MatCardModule } from '@angular/material/card';
     NavComponent,
     SideBasketComponent,
     ProductListComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     MatIconModule,
     AngularSvgIconModule.forRoot(),
     MatCardModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
+  entryComponents: [ProductDetailComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

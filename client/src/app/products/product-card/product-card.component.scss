@@ -7,6 +7,8 @@
   align-items: center;
   background-color: $body-background-color;
   padding: 10px;
+  cursor: pointer;
+
   &__content {
     padding: 0 30px;
     &-des {

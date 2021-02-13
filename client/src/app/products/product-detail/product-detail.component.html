@@ -1,0 +1,35 @@
+<div class="dialog">
+    <div class="dialog__title">
+        <h1 class="dialog__title-text" mat-dialog-title>{{data.product.name}}</h1>
+        <mat-icon mat-dialog-close class="material-icons-outlined dialog__title-close" aria-hidden="false"
+            aria-label="Cancel icon">
+            cancel
+        </mat-icon>
+    </div>
+    <div mat-dialog-content class="dialog__content">
+        <img src={{data.product.photoUrl}} alt={{data.product.name}} />
+        <h2 class="dialog__content-title">Description</h2>
+        <p class="dialog__content-des">{{data.product.description}}</p>
+    </div>
+    <div class="dialog__price">
+        <div>
+            <button mat-icon-button (click)="minusQty()" aria-label="Remove icon button">
+                <mat-icon class="dialog__price-icon">
+                    remove
+                </mat-icon>
+            </button>
+            <button (click)="addQty()" mat-icon-button aria-label="Add icon button">
+                <mat-icon class="dialog__price-icon">
+                    add
+                </mat-icon>
+            </button>
+        </div>
+        <span>£{{data.product.salePrice}}</span>
+    </div>
+    <div class="dialog__qty">
+        <span>
+            Qty {{quantity}}
+        </span>
+        <button class="dialog__qty-but" mat-dialog-close mat-raised-button color="primary">Add</button>
+    </div>
+</div>

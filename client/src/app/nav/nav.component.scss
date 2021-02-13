@@ -29,6 +29,7 @@
       & h1 {
         color: $theme-color;
         font-size: $font-size;
+        text-transform: uppercase;
       }
       & h2 {
         color: $secondary-color;
@@ -53,6 +54,7 @@
       text-decoration: none;
       color: $theme-color;
       cursor: pointer;
+      text-transform: uppercase;
 
       &-icon {
         color: $theme-color;
