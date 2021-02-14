@@ -12,6 +12,8 @@ import { MatCardModule } from '@angular/material/card';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -21,6 +23,7 @@ import { ProductListComponent } from './products/product-list/product-list.compo
 import { ProductCardComponent } from './products/product-card/product-card.component';
 import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { LoginComponent } from './login/login.component';
     ProductListComponent,
     ProductCardComponent,
     ProductDetailComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,8 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,
     MatInputModule,
     MatDividerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   entryComponents: [ProductDetailComponent],
   providers: [],
