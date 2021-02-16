@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SideBasketComponent } from './side-basket.component';
+import { SideBasketItemComponent } from './side-basket-item.component';
 
-describe('SideBasketComponent', () => {
-  let component: SideBasketComponent;
-  let fixture: ComponentFixture<SideBasketComponent>;
+describe('SideBasketItemComponent', () => {
+  let component: SideBasketItemComponent;
+  let fixture: ComponentFixture<SideBasketItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SideBasketComponent ]
+      declarations: [ SideBasketItemComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SideBasketComponent);
+    fixture = TestBed.createComponent(SideBasketItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

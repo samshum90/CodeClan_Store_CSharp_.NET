@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +21,14 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
+            _unitOfWork = unitOfWork;
         }
 
         private async Task<bool> UserExists(string username)
@@ -76,6 +79,8 @@ namespace API.Controllers
 
             if (!result.Succeeded) return Unauthorized();
 
+            var basket = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(user.Id);
+            
             return new UserDto
             {
                 Username = user.UserName,
@@ -86,6 +91,7 @@ namespace API.Controllers
                 Created = user.Created,
                 LastActive = user.LastActive,
                 Address = user.Address,
+                Basket = basket,
             };
         }
     }

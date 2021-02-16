@@ -14,5 +14,6 @@ namespace API.DTOs
         public DateTime LastActive { get; set; }
         public string Address { get; set; }
         public ICollection Orders { get; set; }
+        public OrderDto Basket { get; set; }
     }
 }

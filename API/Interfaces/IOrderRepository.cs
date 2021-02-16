@@ -14,6 +14,7 @@ namespace API.Interfaces
         Task<IEnumerable<AdminOrderDto>> GetOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
         Task<OrderDto> GetOrderDtoByIdAsync(int id);
+        Task<OrderDto> GetOpenOrderByAppUserIdAsync(int id);
         Task<IEnumerable<OrderDto>> GetOrdersByAppUserIdAsync(int appUserId);
         Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId);
         void CreateOrder(Order order);

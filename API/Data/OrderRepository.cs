@@ -59,6 +59,18 @@ namespace API.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
             return order;
         }
+
+        public async Task<OrderDto> GetOpenOrderByAppUserIdAsync(int id)
+        {
+             var order = await _context.Orders
+                .Where(o => o.AppUserId == id)
+                .Include(o => o.OrderedProducts)
+                .ThenInclude(p => p.Product)
+                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(x => x.Status == "Open");
+
+            return order;
+        }
         public async Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id)
         {
             var order = await _context.Orders
@@ -99,6 +111,7 @@ namespace API.Data
             return order;
 
         }
+
         public void Update(Order order)
         {
             _context.Entry(order).State = EntityState.Modified;

@@ -1,0 +1,34 @@
+<div class="sideBasket">
+    <div class="sideBasket__logo" *ngIf="!basket || basket?.orderedProducts?.length  === 0">
+        <span class="sideBasket__logo-text">Your Basket is Empty</span>
+        <svg-icon src="../../../assets/cart.svg" class="sideBasket__logo-icon"></svg-icon>
+    </div>
+
+
+    <table *ngIf="basket?.orderedProducts?.length! > 0 " mat-table [dataSource]="dataSource"
+        class="mat-elevation-z8 sideBasket__table">
+        <ng-container matColumnDef="photo">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let element"> {{element.product.photoUrl}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let element"> {{element.product.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Qty</th>
+            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let element"> {{element.product.salePrice}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+</div>

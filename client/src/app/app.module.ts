@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -14,28 +14,32 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component';
-import { SideBasketComponent } from './side-basket/side-basket.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ProductCardComponent } from './products/product-card/product-card.component';
 import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { SideBasketListComponent } from './side-basket/side-basket-list/side-basket-list.component';
+import { SideBasketItemComponent } from './side-basket/side-basket-item/side-basket-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavComponent,
-    SideBasketComponent,
     ProductListComponent,
     ProductCardComponent,
     ProductDetailComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    SideBasketListComponent,
+    SideBasketItemComponent
   ],
   imports: [
     BrowserModule,
@@ -53,9 +57,10 @@ import { RegisterComponent } from './register/register.component';
     MatDividerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTableModule,
   ],
   entryComponents: [ProductDetailComponent],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

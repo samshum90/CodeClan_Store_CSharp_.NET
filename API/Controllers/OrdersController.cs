@@ -14,7 +14,6 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -36,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> GetProduct(int id)
+        public async Task<ActionResult<OrderDto>> GetOrder(int id)
         {
  
             var order= await _unitOfWork.OrderRepository.GetOrderDtoByIdAsync(id);
@@ -48,8 +47,20 @@ namespace API.Controllers
             return order;
         }
 
+        [HttpGet("basket")]
+        public async Task<ActionResult<OrderDto>> GetBasket()
+        {
+            var userId = User.GetUserId();
+            var order= await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
+            if (order == null)
+            {
+                return Ok();
+            }
+            return order;
+        }
+
         [HttpPost()]
-        public async Task<ActionResult<OrderDto>> AddProduct([FromBody] ProductDto productDto)
+        public async Task<ActionResult<OrderDto>> AddProduct([FromBody] OrderedProductsDto orderedProductsDto)
         {
             var userId = User.GetUserId();
             var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
@@ -69,18 +80,18 @@ namespace API.Controllers
                     };
                  _unitOfWork.OrderRepository.CreateOrder(order);
             }
-            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productDto.Id);
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(orderedProductsDto.Product.Id);
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound("Item not found");
             }
 
             OrderedProducts orderedProducts = new OrderedProducts
             {
                 Order = order,
                 Product = product,
-                Quantity = 1
+                Quantity = orderedProductsDto.Quantity
             };
             _unitOfWork.OrderRepository.CreateOrderedProducts( orderedProducts);
             if (await _unitOfWork.Complete()) return Ok();
