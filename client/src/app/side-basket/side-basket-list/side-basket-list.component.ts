@@ -17,7 +17,7 @@ export class SideBasketListComponent implements OnInit {
   basket!: Order;
   subscription!: Subscription;
   user!: User;
-  displayedColumns: string[] = ['quantity', 'name', 'photo', 'price'];
+  displayedColumns: string[] = ['photo', 'name', 'quantity', 'price'];
   dataSource!: MatTableDataSource<any>;
 
   constructor(public basketService: BasketService, public dataStorageService: DataStorageService, private accountService: AccountService) {

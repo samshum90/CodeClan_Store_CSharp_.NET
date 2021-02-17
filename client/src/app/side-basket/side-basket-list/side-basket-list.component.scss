@@ -26,6 +26,19 @@
 
   &__table {
     width: 100%;
-    height: 100%;
+
+    &-image {
+      height: 100px;
+      width: 100px;
+      object-fit: cover;
+    }
+
+    &-header {
+      color: $ternary-text-color;
+    }
+
+    &-item {
+      font-weight: bold;
+    }
   }
 }

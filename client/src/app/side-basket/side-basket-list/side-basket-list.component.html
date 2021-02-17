@@ -9,7 +9,9 @@
         class="mat-elevation-z8 sideBasket__table">
         <ng-container matColumnDef="photo">
             <th mat-header-cell *matHeaderCellDef> </th>
-            <td mat-cell *matCellDef="let element"> {{element.product.photoUrl}} </td>
+            <td mat-cell *matCellDef="let element">
+                <img class="sideBasket__table-image" src={{element.product.photoUrl}} alt={{element.product.name}} />
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="name">
@@ -18,17 +20,17 @@
         </ng-container>
 
         <ng-container matColumnDef="quantity">
-            <th mat-header-cell *matHeaderCellDef>Qty</th>
-            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+            <th class="sideBasket__table-header" mat-header-cell *matHeaderCellDef>Qty</th>
+            <td class="sideBasket__table-item" mat-cell *matCellDef="let element"> {{element.quantity}} </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Price</th>
-            <td mat-cell *matCellDef="let element"> {{element.product.salePrice}} </td>
+            <th class="sideBasket__table-header" mat-header-cell *matHeaderCellDef>Price</th>
+            <td class="sideBasket__table-item" mat-cell *matCellDef="let element"> {{element.product.salePrice}} </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="sideBasket__table-header" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="sideBasket__table-item" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
 </div>
