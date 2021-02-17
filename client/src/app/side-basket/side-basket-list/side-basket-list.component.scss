@@ -1,5 +1,17 @@
 @import "../../../styles/styles.scss";
 
+td.mat-cell:first-of-type {
+  padding-left: 5px;
+}
+td.mat-cell:last-of-type {
+  padding-right: 5px;
+}
+
+td.mat-footer-cell {
+  border-bottom-width: 0;
+  border-bottom-style: none;
+}
+
 .sideBasket {
   background-color: $body-background-color;
   border-left: 1px solid $secondary-text-color;
@@ -24,21 +36,48 @@
     }
   }
 
+  &__title {
+    text-align: center;
+    color: $theme-color;
+    padding: 10px;
+  }
+
   &__table {
     width: 100%;
 
     &-image {
-      height: 100px;
-      width: 100px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      height: 90px;
+      width: 90px;
       object-fit: cover;
+      border: 1px solid $secondary-text-color;
     }
 
     &-header {
       color: $ternary-text-color;
+      padding: 5px 5px;
+      font-size: $font-size;
     }
 
     &-item {
-      font-weight: bold;
+      font-weight: 900;
+      padding: 10px 5px;
+      font-size: $font-size;
+    }
+
+    &-footer {
+      font-weight: 900;
+      font-size: $font-size;
+    }
+
+    &-button {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%;
+      font-size: $font-size;
     }
   }
 }

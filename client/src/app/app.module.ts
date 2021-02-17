@@ -26,7 +26,6 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { SideBasketListComponent } from './side-basket/side-basket-list/side-basket-list.component';
-import { SideBasketItemComponent } from './side-basket/side-basket-item/side-basket-item.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,6 @@ import { SideBasketItemComponent } from './side-basket/side-basket-item/side-bas
     LoginComponent,
     RegisterComponent,
     SideBasketListComponent,
-    SideBasketItemComponent
   ],
   imports: [
     BrowserModule,

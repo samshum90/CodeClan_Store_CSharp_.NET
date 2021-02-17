@@ -29,7 +29,6 @@ export class SideBasketListComponent implements OnInit {
   }
 
   loadBasket() {
-
     this.subscription = this.basketService.basket
       .subscribe(
         (basket: Order) => {
@@ -42,5 +41,13 @@ export class SideBasketListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(products.orderedProducts);
       })
     }
+  }
+
+  getTotalCost() {
+    return this.basket.orderedProducts.map(op => op.product.salePrice).reduce((acc, value) => acc + parseFloat(value), 0);
+  }
+
+  getTotalQty() {
+    return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
   }
 }
