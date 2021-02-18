@@ -36,7 +36,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{productname}")]
-        public async Task<ActionResult<ProductDto>> GetProduct(string productname)
+        public async Task<ActionResult<Product>> GetProduct(string productname)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productname);
 
@@ -45,7 +45,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return product;
+            return Ok(product);
         }
     }
 }
