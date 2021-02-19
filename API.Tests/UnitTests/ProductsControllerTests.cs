@@ -15,39 +15,94 @@ namespace API.Tests.UnitTests
 {
     public class ProductsControllerTests
     {
+
+        private readonly Mock<IUnitOfWork> _iUnitOfWork;
+        private readonly Mock<IProductRepository> _iProductRepo;
+        private readonly Mock<IPhotoService> _iPhotoService;
+        private readonly Mock<IMapper> _iMapper;
+
+        public ProductsControllerTests()
+        {
+            _iMapper = new Mock<IMapper>();
+            _iPhotoService = new Mock<IPhotoService>();
+            _iProductRepo = new Mock<IProductRepository>();
+            _iUnitOfWork = new Mock<IUnitOfWork>();
+
+            _iUnitOfWork.Setup(x => x.ProductRepository).Returns(_iProductRepo.Object);
+            _iUnitOfWork.Setup(x => x.ProductRepository.GetProductsAsync())
+                .ReturnsAsync(GetTestProducts());
+        }
+
+        [Fact]
+        public async Task GetProducts_ReturnOKResult()
+        {
+            // Arrange
+            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+
+            // Act
+            var okResult = await controller.GetProducts();
+
+            // Assert
+            var returnResult = Assert.IsType<OkObjectResult>(okResult.Result);
+        }
+
+        [Fact]
+        public async Task GetProducts_ReturnAllProducts()
+        {
+            // Arrange
+            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+
+            // Act
+            var result = await controller.GetProducts();
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<ProductDto>>>(result);
+            var returnValue = actionResult.Result as OkObjectResult;
+            var products = returnValue.Value as IEnumerable<ProductDto>;
+            var product = products.FirstOrDefault(p => p.Name == "Test One");
+            Assert.Equal("Test One", product.Name);
+            Assert.Equal(2, products.Count());
+
+        }
+
+        [Fact]
+        public async Task GetProduct_ReturnsNotFoundObjectResultForNonexistentProduct()
+        {
+            // Arrange
+            string nonExistentTestName = "Test Four";
+
+            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+            // Act
+            var result = await controller.GetProduct(nonExistentTestName);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<ProductDto>>(result);
+            Assert.IsType<NotFoundObjectResult>(actionResult.Result);
+        }
+
         [Fact]
         public async Task GetProduct_ReturnProduct()
         {
             // Arrange
             string testName = "Test One";
-            var mockRepo = new Mock<IProductRepository>();
-            var mockUoW = new Mock<IUnitOfWork>();
-
-            mockUoW.Setup(x => x.ProductRepository).Returns(mockRepo.Object);
-                    mockUoW.Setup(x => x.ProductRepository.GetProductByNameAsync(testName))
+            _iUnitOfWork.Setup(x => x.ProductRepository.GetProductByNameAsync(testName))
                     .ReturnsAsync(GetTestProducts().FirstOrDefault(
                             p => p.Name == testName));
 
-                    var mockPhotoService = new Mock<IPhotoService>();
-            
-                
-            var mockMapper = new Mock<IMapper>();
-            var controller = new ProductsController( mockMapper.Object, mockUoW.Object, mockPhotoService.Object);
-
+            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
             // Act
             var result = await controller.GetProduct(testName);
 
             // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnValue = Assert.IsType<List<Product>>(okResult.Value);
-            var product = returnValue.FirstOrDefault();
+            var okResult = Assert.IsType<ActionResult<ProductDto>>(result);
+            var product = Assert.IsType<ProductDto>(result.Value);
             Assert.Equal("Test One", product.Name);
         }
 
-        private List<Product> GetTestProducts()
+        private List<ProductDto> GetTestProducts()
         {
-            var products = new List<Product>();
-            products.Add(new Product()
+            var products = new List<ProductDto>();
+            products.Add(new ProductDto()
             {
                 Id = 1,
                 Name = "Test One",
@@ -58,7 +113,7 @@ namespace API.Tests.UnitTests
                 Stock = 1,
                 Highlight = true,
             });
-            products.Add(new Product()
+            products.Add(new ProductDto()
             {
                 Id = 2,
                 Name = "Test Two",

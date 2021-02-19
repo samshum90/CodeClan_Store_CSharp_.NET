@@ -37,11 +37,11 @@ namespace API.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Product> GetProductByNameAsync(string name)
+        public async Task<ProductDto> GetProductByNameAsync(string name)
         {
             return await _context.Products
                 .Include(p => p.Photos)
-                // .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Name == name);
         }
         public void AddProduct(Product product)

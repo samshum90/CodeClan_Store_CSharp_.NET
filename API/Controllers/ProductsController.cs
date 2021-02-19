@@ -36,16 +36,16 @@ namespace API.Controllers
         }
 
         [HttpGet("{productname}")]
-        public async Task<ActionResult<Product>> GetProduct(string productname)
+        public async Task<ActionResult<ProductDto>> GetProduct(string productname)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByNameAsync(productname);
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound(productname);
             }
 
-            return Ok(product);
+            return product;
         }
     }
 }
