@@ -30,22 +30,22 @@ namespace API.Controllers
         {
             var userId = User.GetUserId();
             
-            var orders = await _unitOfWork.OrderRepository.GetCustomerOrdersByAppUserIdAsync(userId);
-            return Ok(orders);
+            var orders = await _unitOfWork.OrderRepository.GetOrdersByAppUserIdAsync(userId);
+            return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<CustomerOrderDto>>(orders));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerOrderDto>> GetOrder(int id)
         {
             var userId = User.GetUserId();
-            var order= await _unitOfWork.OrderRepository.GetCustomerOrderDtoByIdAsync(id, userId);
+            var order= await _unitOfWork.OrderRepository.GetOrderByIdAsync(id, userId);
 
             if (order == null)
             {
                 return NotFound("Order not found");
             }
 
-            return order;
+            return _mapper.Map<CustomerOrderDto>(order);
         }
 
         [HttpGet("basket")]

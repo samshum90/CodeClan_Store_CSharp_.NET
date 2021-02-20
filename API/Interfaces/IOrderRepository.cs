@@ -13,8 +13,8 @@ namespace API.Interfaces
         Task<IEnumerable<Order>> GetOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
         Task<Order> GetOpenOrderByAppUserIdAsync(int appUserId);
-        Task<IEnumerable<CustomerOrderDto>> GetCustomerOrdersByAppUserIdAsync(int appUserId);
-        Task<CustomerOrderDto> GetCustomerOrderDtoByIdAsync(int id, int userId);
+        Task<IEnumerable<Order>> GetOrdersByAppUserIdAsync(int appUserId);
+        Task<Order> GetOrderByIdAsync(int id, int userId);
         // Task<IEnumerable<AdminOrderDto>> GetAdminOrdersAsync();
         // Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id);
         void CreateOrderedProducts(OrderedProducts orderedProducts);

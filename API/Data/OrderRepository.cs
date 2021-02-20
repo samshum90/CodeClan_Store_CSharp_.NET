@@ -57,25 +57,23 @@ namespace API.Data
             return order;
         }
 
-        public async Task<IEnumerable<CustomerOrderDto>> GetCustomerOrdersByAppUserIdAsync(int appUserId)
+        public async Task<IEnumerable<Order>> GetOrdersByAppUserIdAsync(int appUserId)
         {
             var orders = await _context.Orders
                 .Where(o => o.AppUserId == appUserId)
                 .Include(o => o.OrderedProducts)
                 .ThenInclude(p => p.Product)
-                .ProjectTo<CustomerOrderDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return orders;
         }
 
-        public async Task<CustomerOrderDto> GetCustomerOrderDtoByIdAsync(int id, int userId)
+        public async Task<Order> GetOrderByIdAsync(int id, int userId)
         {
             var order = await _context.Orders
                 .Where(o => o.AppUserId == userId)
                 .Include(o => o.OrderedProducts)
                 .ThenInclude(p => p.Product)
-                .ProjectTo<CustomerOrderDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Id == id);
             return order;
         }

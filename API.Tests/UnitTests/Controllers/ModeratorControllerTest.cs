@@ -36,7 +36,7 @@ namespace API.Tests.UnitTests.Controllers
         //    _iMapper.Setup(m => m.Map<Order, AdminOrderDto>(It.IsAny<Order>())).Returns(new AdminOrderDto());
             _iUnitOfWork.Setup(x => x.ProductRepository).Returns(_iProductRepo.Object);
             _iUnitOfWork.Setup(x => x.OrderRepository).Returns(_iOrderRepo.Object);
-            _iUnitOfWork.Setup(x => x.OrderRepository.GetAdminOrdersAsync())
+            _iUnitOfWork.Setup(x => x.OrderRepository.GetOrdersAsync())
                 .ReturnsAsync(GetTestOrders());
             
         }
@@ -93,7 +93,7 @@ namespace API.Tests.UnitTests.Controllers
         {
             // Arrange
             int testId = 1;
-            _iUnitOfWork.Setup(x => x.OrderRepository.GetAdminOrderDtoByIdAsync(testId))
+            _iUnitOfWork.Setup(x => x.OrderRepository.GetOrderByIdAsync(testId))
                     .ReturnsAsync(GetTestOrders().FirstOrDefault(
                             p => p.Id == testId));
 
@@ -140,11 +140,11 @@ namespace API.Tests.UnitTests.Controllers
 
             // Assert
             var okResult = Assert.IsType<ActionResult<ProductDto>>(result);
-            var product = Assert.IsType<Product>(result.Value);
+            var product = Assert.IsType<ProductDto>(result.Value);
             Assert.Equal(1, product.Id);
         }
 
-        
+
 
 
         private List<Product> GetTestProducts()
@@ -174,37 +174,10 @@ namespace API.Tests.UnitTests.Controllers
             });
             return products;
         }
-        private List<ProductDto> GetTestProductDtos()
+        private List<Order> GetTestOrders()
         {
-            var products = new List<ProductDto>();
-            products.Add(new ProductDto()
-            {
-                Id = 1,
-                Name = "Test One",
-                ProductPrice = "1.00",
-                SalePrice = "2.00",
-                Description ="Test One Description",
-                Category = "One",
-                Stock = 1,
-                Highlight = true,
-            });
-            products.Add(new ProductDto()
-            {
-                Id = 2,
-                Name = "Test Two",
-                ProductPrice = "4.00",
-                SalePrice = "2.00",
-                Description ="Test Two Description",
-                Category = "Two",
-                Stock = 2,
-                Highlight = false,
-            });
-            return products;
-        }
-        private List<AdminOrderDto> GetTestOrders()
-        {
-            var orders = new List<AdminOrderDto>();
-            orders.Add(new AdminOrderDto()
+            var orders = new List<Order>();
+            orders.Add(new Order()
             {
                 Id = 1,
                 OrderCreated = new DateTime(2021, 02, 16, 14, 44, 28),
