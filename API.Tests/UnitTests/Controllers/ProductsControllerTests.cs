@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Controllers;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,16 @@ namespace API.Tests.UnitTests
         private readonly Mock<IUnitOfWork> _iUnitOfWork;
         private readonly Mock<IProductRepository> _iProductRepo;
         private readonly Mock<IPhotoService> _iPhotoService;
-        private readonly Mock<IMapper> _iMapper;
+        private readonly IMapper _iMapper;
 
         public ProductsControllerTests()
         {
-            _iMapper = new Mock<IMapper>();
-            _iPhotoService = new Mock<IPhotoService>();
             _iProductRepo = new Mock<IProductRepository>();
             _iUnitOfWork = new Mock<IUnitOfWork>();
+
+            var autoMapperProfiles = new AutoMapperProfiles();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(autoMapperProfiles));
+            _iMapper = new Mapper(configuration);
 
             _iUnitOfWork.Setup(x => x.ProductRepository).Returns(_iProductRepo.Object);
             _iUnitOfWork.Setup(x => x.ProductRepository.GetProductsAsync())
@@ -37,7 +40,7 @@ namespace API.Tests.UnitTests
         public async Task GetProducts_ReturnOKResult()
         {
             // Arrange
-            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+            var controller = new ProductsController( _iMapper, _iUnitOfWork.Object);
 
             // Act
             var okResult = await controller.GetProducts();
@@ -50,7 +53,7 @@ namespace API.Tests.UnitTests
         public async Task GetProducts_ReturnAllProducts()
         {
             // Arrange
-            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+            var controller = new ProductsController( _iMapper, _iUnitOfWork.Object);
 
             // Act
             var result = await controller.GetProducts();
@@ -71,7 +74,7 @@ namespace API.Tests.UnitTests
             // Arrange
             string nonExistentTestName = "Test Four";
 
-            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+            var controller = new ProductsController( _iMapper, _iUnitOfWork.Object);
             // Act
             var result = await controller.GetProduct(nonExistentTestName);
 
@@ -89,7 +92,7 @@ namespace API.Tests.UnitTests
                     .ReturnsAsync(GetTestProducts().FirstOrDefault(
                             p => p.Name == testName));
 
-            var controller = new ProductsController( _iMapper.Object, _iUnitOfWork.Object, _iPhotoService.Object);
+            var controller = new ProductsController( _iMapper, _iUnitOfWork.Object);
             // Act
             var result = await controller.GetProduct(testName);
 
@@ -99,10 +102,10 @@ namespace API.Tests.UnitTests
             Assert.Equal("Test One", product.Name);
         }
 
-        private List<ProductDto> GetTestProducts()
+        private List<Product> GetTestProducts()
         {
-            var products = new List<ProductDto>();
-            products.Add(new ProductDto()
+            var products = new List<Product>();
+            products.Add(new Product()
             {
                 Id = 1,
                 Name = "Test One",
@@ -113,7 +116,7 @@ namespace API.Tests.UnitTests
                 Stock = 1,
                 Highlight = true,
             });
-            products.Add(new ProductDto()
+            products.Add(new Product()
             {
                 Id = 2,
                 Name = "Test Two",

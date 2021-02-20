@@ -7,12 +7,12 @@ namespace API.Interfaces
 {
     public interface IProductRepository
     {
-        void Update(Product product);
-        Task<IEnumerable<ProductDto>> GetProductsAsync();
-        Task<Product> GetProductByIdAsync(int id);
-        Task<ProductDto> GetProductByNameAsync(string name);
         void AddProduct(Product product);
+        void Update(Product product);
         void DeleteProduct(Product product);
+        Task<IEnumerable<Product>> GetProductsAsync();
+        Task<Product> GetProductByIdAsync(int id);
+        Task<Product> GetProductByNameAsync(string name);
         Task<Product> GetProductByPhotoIdAsync(int id);
     }
 }

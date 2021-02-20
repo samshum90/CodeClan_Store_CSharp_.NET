@@ -26,29 +26,30 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<CustomerOrderDto>>> GetOrders()
         {
             var userId = User.GetUserId();
             
-            var orders = await _unitOfWork.OrderRepository.GetOrdersByAppUserIdAsync(userId);
+            var orders = await _unitOfWork.OrderRepository.GetCustomerOrdersByAppUserIdAsync(userId);
             return Ok(orders);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> GetOrder(int id)
+        public async Task<ActionResult<CustomerOrderDto>> GetOrder(int id)
         {
- 
-            var order= await _unitOfWork.OrderRepository.GetOrderDtoByIdAsync(id);
+            var userId = User.GetUserId();
+            var order= await _unitOfWork.OrderRepository.GetCustomerOrderDtoByIdAsync(id, userId);
 
             if (order == null)
             {
-                return NotFound();
+                return NotFound("Order not found");
             }
+
             return order;
         }
 
         [HttpGet("basket")]
-        public async Task<ActionResult<OrderDto>> GetBasket()
+        public async Task<ActionResult<CustomerOrderDto>> GetBasket()
         {
             var userId = User.GetUserId();
             var order= await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
@@ -56,7 +57,8 @@ namespace API.Controllers
             {
                 return Ok();
             }
-            return order;
+            var orderDto = _mapper.Map<CustomerOrderDto>(order);
+            return orderDto;
         }
 
         [HttpPost()]
@@ -64,11 +66,7 @@ namespace API.Controllers
         {
             var userId = User.GetUserId();
             var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
-            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(userId);
-
-            Order order = null;
-
-            order = orders.SingleOrDefault(o => o.Status == "Open");
+            var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
 
             if (order == null)
             {
@@ -117,8 +115,7 @@ namespace API.Controllers
         [HttpDelete("delete-item/{itemId}")]
         public async Task<ActionResult> DeleteItemFromOrder(int itemId)
         {
-            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(User.GetUserId());
-            var order = orders.SingleOrDefault(o => o.Status == "Open");
+            var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(User.GetUserId());
             if (order == null) return NotFound("Failed to find an open order");
 
             var item = order.OrderedProducts.SingleOrDefault(p => p.ProductId == itemId);
@@ -133,8 +130,7 @@ namespace API.Controllers
         [HttpPut("edit-item/{itemId}")]
         public async Task<ActionResult> UpdateProductsInOrder( int itemId, [FromBody] QuantityDto quantityDto)
         {
-            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(User.GetUserId());
-            var order = orders.SingleOrDefault(o => o.Status == "Open");
+            var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(User.GetUserId());
             if (order == null) return NotFound("Failed to find an open order");
 
             var orderedProducts = await _unitOfWork.OrderRepository.GetOrderedProductsByProductIdAndOrderIdAsync(itemId, order.Id);
@@ -151,8 +147,7 @@ namespace API.Controllers
         [HttpPut("complete/{id}")]
          public async Task<ActionResult> CompleteOrder( int id)
         {
-            var orders = await _unitOfWork.OrderRepository.GetOrderByAppUserIdAsync(User.GetUserId());
-            var order = orders.SingleOrDefault(o => o.Status == "Open");
+            var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(User.GetUserId());
             if (order == null) return NotFound("Failed to find an open order");
 
             order.OrderDate = DateTime.Now;

@@ -20,19 +20,18 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
-        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork, IPhotoService photoService)
+        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _photoService = photoService;
         }
 
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
             var products = await _unitOfWork.ProductRepository.GetProductsAsync();
-            return Ok(products);
+
+            return Ok( _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products));
         }
 
         [HttpGet("{productname}")]
@@ -45,7 +44,7 @@ namespace API.Controllers
                 return NotFound(productname);
             }
 
-            return product;
+            return _mapper.Map<ProductDto>(product);;
         }
     }
 }

@@ -21,22 +21,13 @@ namespace API.Data
             _mapper = mapper;
         }
 
-        public void CreateOrderedProducts(OrderedProducts orderedProducts)
-        {
-             _context.OrderedProducts.Add(orderedProducts);
-        }
-        public async Task<OrderedProducts> GetOrderedProductsByProductIdAsync(int productId)
-        {
-            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId);
-        }
-        public async Task<OrderedProducts> GetOrderedProductsByProductIdAndOrderIdAsync(int productId, int orderId)
-        {
-            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId && x.OrderId == orderId);
-        }
-
         public void CreateOrder(Order order)
         {
-             _context.Orders.Add(order);
+           _context.Orders.Add(order);
+        }
+        public void Update(Order order)
+        {
+            _context.Entry(order).State = EntityState.Modified;
         }
 
         public void DeleteOrder(Order order)
@@ -44,82 +35,90 @@ namespace API.Data
             _context.Orders.Remove(order);
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id)
+        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        {
+                return await _context.Orders.ToListAsync();
+        }
+
+         public async Task<Order> GetOrderByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
             return order;
         }
 
-        public async Task<OrderDto> GetOrderDtoByIdAsync(int id)
-        {
-            var order = await _context.Orders
-                .Include(o => o.OrderedProducts)
-                .ThenInclude(p => p.Product)
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(x => x.Id == id);
-            return order;
-        }
-
-        public async Task<OrderDto> GetOpenOrderByAppUserIdAsync(int id)
+        public async Task<Order> GetOpenOrderByAppUserIdAsync(int appUserId)
         {
              var order = await _context.Orders
-                .Where(o => o.AppUserId == id)
+                .Where(o => o.AppUserId == appUserId)
                 .Include(o => o.OrderedProducts)
                 .ThenInclude(p => p.Product)
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Status == "Open");
 
             return order;
         }
-        public async Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id)
+
+        public async Task<IEnumerable<CustomerOrderDto>> GetCustomerOrdersByAppUserIdAsync(int appUserId)
         {
-            var order = await _context.Orders
+            var orders = await _context.Orders
+                .Where(o => o.AppUserId == appUserId)
                 .Include(o => o.OrderedProducts)
                 .ThenInclude(p => p.Product)
-                .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<CustomerOrderDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return orders;
+        }
+
+        public async Task<CustomerOrderDto> GetCustomerOrderDtoByIdAsync(int id, int userId)
+        {
+            var order = await _context.Orders
+                .Where(o => o.AppUserId == userId)
+                .Include(o => o.OrderedProducts)
+                .ThenInclude(p => p.Product)
+                .ProjectTo<CustomerOrderDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Id == id);
             return order;
         }
 
-        public async Task<IEnumerable<AdminOrderDto>> GetOrdersAsync()
+        // public async Task<IEnumerable<AdminOrderDto>> GetAdminOrdersAsync()
+        // {
+        //     var orders = await _context.Orders
+        //         .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
+        //         .ToListAsync();
+
+        //     return orders;
+        // }
+
+        // public async Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id)
+        // {
+        //     var order = await _context.Orders
+        //         .Include(o => o.OrderedProducts)
+        //         .ThenInclude(p => p.Product)
+        //         .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
+        //         .SingleOrDefaultAsync(x => x.Id == id);
+        //     return order;
+        // }
+
+        public void CreateOrderedProducts(OrderedProducts orderedProducts)
         {
-            var orders = await _context.Orders
-                .ProjectTo<AdminOrderDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            return orders;
-        }
-        public async Task<IEnumerable<OrderDto>> GetOrdersByAppUserIdAsync(int appUserId)
-        {
-            var orders = await _context.Orders
-                .Where(o => o.AppUserId == appUserId)
-                .Include(o => o.OrderedProducts)
-                .ThenInclude(p => p.Product)
-                .ProjectTo<OrderDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            return orders;
-
-        }
-        public async Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId)
-        {
-            var order = await _context.Orders
-                .Where(o => o.AppUserId == appUserId)
-                .Include(o => o.OrderedProducts)
-                .ToListAsync();
-
-            return order;
-
+            _context.OrderedProducts.Add(orderedProducts);
         }
 
-        public void Update(Order order)
-        {
-            _context.Entry(order).State = EntityState.Modified;
-        }
-        public void UpdateOrderedProducts (OrderedProducts  orderedProducts )
+       public void UpdateOrderedProducts(OrderedProducts orderedProducts)
         {
             _context.Entry(orderedProducts).State = EntityState.Modified;
         }
+
+        public async Task<OrderedProducts> GetOrderedProductsByProductIdAsync(int productId)
+        {
+            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId);
+        }
+
+        public async Task<OrderedProducts> GetOrderedProductsByProductIdAndOrderIdAsync(int productId, int orderId)
+        {
+            return await _context.OrderedProducts.SingleOrDefaultAsync(x => x.ProductId == productId && x.OrderId == orderId);
+        }
+
 
     }
 }

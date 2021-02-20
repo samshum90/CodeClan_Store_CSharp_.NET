@@ -26,37 +26,40 @@ namespace API.Controllers
             _photoService = photoService;
         }
         [HttpGet("orders")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<AdminOrderDto>>> GetOrders()
         {
             var orders = await _unitOfWork.OrderRepository.GetOrdersAsync();
-            return Ok(orders);
+            return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<AdminOrderDto>>(orders));
+            
         }
 
         [HttpGet("order/{id}")]
         public async Task<ActionResult<AdminOrderDto>> GetOrder(int id)
         {
-            var order = await _unitOfWork.OrderRepository.GetAdminOrderDtoByIdAsync(id);
+            var order = await _unitOfWork.OrderRepository.GetOrderByIdAsync(id);
 
             if (order == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
 
-            return order;
+            return _mapper.Map<AdminOrderDto>(order);
         }
 
         [HttpGet("product/{id}", Name = "GetProduct")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(id);
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
 
-            return product;
+            return _mapper.Map<ProductDto>(product);
+
         }
+
         [HttpPut("product/{id}")]
         public async Task<ActionResult> UpdateProduct( int id, [FromForm] ProductDto productDto)
         {

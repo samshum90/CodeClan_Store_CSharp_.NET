@@ -7,18 +7,19 @@ namespace API.Interfaces
 {
     public interface IOrderRepository
     {
+        void CreateOrder(Order order);
         void Update(Order order);
+        void DeleteOrder(Order order);
+        Task<IEnumerable<Order>> GetOrdersAsync();
+        Task<Order> GetOrderByIdAsync(int id);
+        Task<Order> GetOpenOrderByAppUserIdAsync(int appUserId);
+        Task<IEnumerable<CustomerOrderDto>> GetCustomerOrdersByAppUserIdAsync(int appUserId);
+        Task<CustomerOrderDto> GetCustomerOrderDtoByIdAsync(int id, int userId);
+        // Task<IEnumerable<AdminOrderDto>> GetAdminOrdersAsync();
+        // Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id);
+        void CreateOrderedProducts(OrderedProducts orderedProducts);
+        void UpdateOrderedProducts(OrderedProducts orderedProducts);
         Task<OrderedProducts> GetOrderedProductsByProductIdAsync(int productId);
         Task<OrderedProducts> GetOrderedProductsByProductIdAndOrderIdAsync(int productId, int orderId);
-        Task<AdminOrderDto> GetAdminOrderDtoByIdAsync(int id);
-        Task<IEnumerable<AdminOrderDto>> GetOrdersAsync();
-        Task<Order> GetOrderByIdAsync(int id);
-        Task<OrderDto> GetOrderDtoByIdAsync(int id);
-        Task<OrderDto> GetOpenOrderByAppUserIdAsync(int id);
-        Task<IEnumerable<OrderDto>> GetOrdersByAppUserIdAsync(int appUserId);
-        Task<IEnumerable<Order>> GetOrderByAppUserIdAsync(int appUserId);
-        void CreateOrder(Order order);
-        void DeleteOrder(Order order);
-        void CreateOrderedProducts(OrderedProducts orderedProducts);
     }
 }

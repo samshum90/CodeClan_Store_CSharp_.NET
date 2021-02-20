@@ -79,8 +79,6 @@ namespace API.Controllers
 
             if (!result.Succeeded) return Unauthorized();
 
-            var basket = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(user.Id);
-            
             return new UserDto
             {
                 Username = user.UserName,
@@ -91,7 +89,6 @@ namespace API.Controllers
                 Created = user.Created,
                 LastActive = user.LastActive,
                 Address = user.Address,
-                Basket = basket,
             };
         }
     }

@@ -13,6 +13,7 @@ namespace API.Helpers
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(
                 src => src.Photos.FirstOrDefault(x => x.IsMain).Url));
             CreateMap<Order, OrderDto>();
+            CreateMap<Order, CustomerOrderDto>();
             CreateMap<RegisterDto, AppUser>();
             CreateMap<OrderedProducts, OrderedProductsDto>();
             CreateMap<QuantityDto, OrderedProducts>();

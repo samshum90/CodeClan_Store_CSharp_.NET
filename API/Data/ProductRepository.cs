@@ -19,17 +19,30 @@ namespace API.Data
             _mapper = mapper;
             _context = context;
         }
+
+        public void AddProduct(Product product)
+        {
+            _context.Products.Add(product);
+        }
+
         public void Update(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;
         }
-        public async Task<IEnumerable<ProductDto>> GetProductsAsync()
+
+        public void DeleteProduct(Product product)
+        {
+            _context.Products.Remove(product);
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             return await _context.Products
                 .Include(p => p.Photos)
-                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                // .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
         public async Task<Product> GetProductByIdAsync(int id)
         {
             return await _context.Products
@@ -37,21 +50,14 @@ namespace API.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<ProductDto> GetProductByNameAsync(string name)
+        public async Task<Product> GetProductByNameAsync(string name)
         {
             return await _context.Products
                 .Include(p => p.Photos)
-                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                // .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.Name == name);
         }
-        public void AddProduct(Product product)
-        {
-            _context.Products.Add(product);
-        }
-        public void DeleteProduct(Product product)
-        {
-            _context.Products.Remove(product);
-        }
+
         public async Task<Product> GetProductByPhotoIdAsync(int id)
         {
             return await _context.Products
