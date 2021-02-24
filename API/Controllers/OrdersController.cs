@@ -62,7 +62,7 @@ namespace API.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult<OrderDto>> AddProduct([FromBody] OrderedProductsDto orderedProductsDto)
+        public async Task<ActionResult<OrderDto>> AddProduct( [FromBody] OrderedProductsDto orderedProductsDto)
         {
             var userId = User.GetUserId();
             var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);

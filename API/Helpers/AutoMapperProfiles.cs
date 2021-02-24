@@ -11,7 +11,7 @@ namespace API.Helpers
         {
             CreateMap<Product, ProductDto>()
             .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(
-                src => src.Photos.FirstOrDefault(x => x.IsMain).Url));
+                src => src.Photos.FirstOrDefault(x => x.IsMain).Url)).ReverseMap();
             CreateMap<Order, OrderDto>();
             CreateMap<Order, CustomerOrderDto>();
             CreateMap<RegisterDto, AppUser>();

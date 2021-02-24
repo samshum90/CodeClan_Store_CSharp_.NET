@@ -59,28 +59,9 @@ namespace API.Controllers
             return _mapper.Map<ProductDto>(product);
 
         }
-
-        [HttpPut("product/{id}")]
-        public async Task<ActionResult> UpdateProduct( int id, [FromForm] ProductDto productDto)
-        {
-            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(id);
-            if (product == null)
-            {
-                return  NotFound();
-            }
-
-            _mapper.Map(productDto, product);
-
-            _unitOfWork.ProductRepository.Update(product);
-
-            if (await _unitOfWork.Complete()) return NoContent();
-            
-            return BadRequest("Failed to update product");
-            
-        }
-
+        
         [HttpPost("product")]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<ActionResult<Product>> CreateProduct([FromForm] Product product)
         {
             var productCheck = await _unitOfWork.ProductRepository.GetProductByNameAsync(product.Name);
 
@@ -91,8 +72,27 @@ namespace API.Controllers
             return BadRequest("Failed to add product");
         }
 
+        [HttpPut("product/{id}")]
+        public async Task<ActionResult> UpdateProduct([FromForm] Product product)
+        {
+            var dbProduct = await _unitOfWork.ProductRepository.GetProductByIdAsync(product.Id);
+            if (dbProduct == null)
+            {
+                return  NotFound(dbProduct);
+            }
+
+            _mapper.Map(product, dbProduct);
+
+            _unitOfWork.ProductRepository.Update(dbProduct);
+
+            if (await _unitOfWork.Complete()) return NoContent();
+            
+            return BadRequest("Failed to update product");
+            
+        }
+
         [HttpDelete("product/{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<ActionResult> DeleteProduct(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(id);
             if (product == null)
@@ -106,13 +106,13 @@ namespace API.Controllers
             return BadRequest("Failed to Delete product");
         }
 
-        [HttpPost("product/add-photo/{itemId}")]
-        public async Task<ActionResult<ProductPhotoDto>> AddPhoto(int itemId, IFormFile file)
+        [HttpPost("product/add-photo/{productId}")]
+        public async Task<ActionResult<ProductPhotoDto>> AddPhoto(int productId, IFormFile file)
         {
-            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(itemId);
-
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productId);
+            if (product == null) return NotFound();
+            
             var result = await _photoService.AddPhotoAsync(file);
-
             if (result.Error != null) return BadRequest(result.Error.Message);
 
             var photo = new ProductPhoto
@@ -130,11 +130,11 @@ namespace API.Controllers
 
             if (await _unitOfWork.Complete())
             {
-                return CreatedAtRoute("GetProduct", new { id = itemId }, _mapper.Map<ProductPhotoDto>(photo));
+                return CreatedAtRoute("GetProduct", new { id = productId }, _mapper.Map<ProductPhotoDto>(photo));
             }
 
 
-            return BadRequest("Problem addding photo");
+            return BadRequest("Problem adding photo");
         }
         [HttpPut("product/set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(int photoId)
