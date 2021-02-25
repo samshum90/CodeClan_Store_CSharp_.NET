@@ -27,9 +27,9 @@ export class BasketService {
     return this.basket;
   }
 
-  // getNumberOfItems() {
-  //   this.basket.orderedProducts.
-  // }
+  getNumberOfItems() {
+    return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+  }
   // addBasket(basket: Product) {
   //   this.basket.push(basket);
   //   this.basketChanged.next(this.basket.slice())
@@ -49,7 +49,6 @@ export class BasketService {
       .pipe(map((res: any) => {
         this.basket.orderedProducts.push(res);
         this.basketChanged.next(this.basket);
-        console.log(this.basket)
       }));
     // .subscribe(
     //   (res: any) => {

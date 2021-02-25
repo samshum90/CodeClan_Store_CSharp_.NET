@@ -44,7 +44,7 @@ export class SideBasketListComponent implements OnInit, OnDestroy {
     this.loadBasket();
   }
 
-  loadBasket() {
+  loadBasket(): void {
     this.subscription = this.basketService.basketChanged
       .subscribe(
         (basketChanged: Order) => {
@@ -55,16 +55,17 @@ export class SideBasketListComponent implements OnInit, OnDestroy {
     this.basket = this.basketService.getBasket();
     if (!!this.basket) {
       this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
+      this.getTotalQty();
     }
   }
 
-  getTotalCost() {
+  getTotalCost(): number {
     return this.basket.orderedProducts.map(op => parseFloat(op.product.salePrice) * op.quantity)
       .reduce((acc, value) => acc + value, 0);
   }
 
-  getTotalQty() {
-    return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+  getTotalQty(): number {
+    return this.basketService.getNumberOfItems();
   }
 
   selectQty(event: MatSelectChange, od: OrderedProducts) {
