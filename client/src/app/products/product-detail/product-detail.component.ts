@@ -34,7 +34,7 @@ export class ProductDetailComponent implements OnInit {
       quantity: this.quantity
     }
 
-    this.basketService.addProduct(this.orderedProduct);
+    this.basketService.addProduct(this.orderedProduct).subscribe();
   }
 
 }

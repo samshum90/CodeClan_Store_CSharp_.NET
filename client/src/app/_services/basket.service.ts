@@ -46,21 +46,21 @@ export class BasketService {
 
   addProduct(orderedProduct: OrderedProducts) {
     return this.http.post(this.baseUrl + "orders", orderedProduct)
-      // .pipe(map((res: any) => {
-      //   this.basket.orderedProducts.push(res);
-      //   this.basketChanged.next(this.basket);
-      //   console.log(this.basket)
-      // }));
-      .subscribe(
-        (res: any) => {
-          if (!!this.basket) {
-            this.basket.orderedProducts.push(res);
-          }
-          this.basketChanged.next(this.basket);
-        },
-        (error) => {
-          console.error(error);
-        })
+      .pipe(map((res: any) => {
+        this.basket.orderedProducts.push(res);
+        this.basketChanged.next(this.basket);
+        console.log(this.basket)
+      }));
+    // .subscribe(
+    //   (res: any) => {
+    //     if (!!this.basket) {
+    //       this.basket.orderedProducts.push(res);
+    //     }
+    //     this.basketChanged.next(this.basket);
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   })
   }
 
   updateProduct(qty: number, od: OrderedProducts) {
@@ -78,7 +78,7 @@ export class BasketService {
         .pipe(map(() => {
           // const index = this.basket.orderedProducts.findIndex(od => od.product.id === product.id)
           this.basket.orderedProducts[index].quantity = qty;
-          // this.recipesChanged.next(this.basket)
+          this.basketChanged.next(this.basket)
         }));
     }
   }

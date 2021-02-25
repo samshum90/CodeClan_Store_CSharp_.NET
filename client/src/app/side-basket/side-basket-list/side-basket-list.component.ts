@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ import { DataStorageService } from 'src/app/_services/data-storage.service';
   templateUrl: './side-basket-list.component.html',
   styleUrls: ['./side-basket-list.component.scss']
 })
-export class SideBasketListComponent implements OnInit {
+export class SideBasketListComponent implements OnInit, OnDestroy {
   basket!: Order;
   subscription!: Subscription;
   user!: User;
@@ -49,6 +49,7 @@ export class SideBasketListComponent implements OnInit {
       .subscribe(
         (basketChanged: Order) => {
           this.basket = basketChanged;
+          this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
         }
       );
     this.basket = this.basketService.getBasket();
@@ -67,9 +68,16 @@ export class SideBasketListComponent implements OnInit {
   }
 
   selectQty(event: MatSelectChange, od: OrderedProducts) {
-    this.basketService.updateProduct(event.value, od).subscribe(() => this.getTotalCost());
+    this.basketService.updateProduct(event.value, od).subscribe(() => {
+      this.getTotalCost();
+      this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
+    });
 
     // this.newQty = parseInt((event.target as HTMLSelectElement).value);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
 
