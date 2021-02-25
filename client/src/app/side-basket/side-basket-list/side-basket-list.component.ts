@@ -23,6 +23,7 @@ export class SideBasketListComponent implements OnInit {
   displayedColumns: string[] = ['photo', 'name', 'quantity', 'price'];
   dataSource!: MatTableDataSource<any>;
   numbers: number[] = [
+    0,
     1,
     2,
     3,

@@ -64,15 +64,22 @@ export class BasketService {
   }
 
   updateProduct(qty: number, od: OrderedProducts) {
-    const quantity: Quantity = {
-      quantity: qty,
+    const index = this.basket.orderedProducts.indexOf(od);
+    if (qty === 0) {
+      return this.http.delete(this.baseUrl + "orders/delete-item/" + od.product.id)
+        .pipe(map(() => {
+          this.basket.orderedProducts.splice(index, 1);
+        }))
+    } else {
+      const quantity: Quantity = {
+        quantity: qty,
+      }
+      return this.http.put(this.baseUrl + "orders/edit-item/" + od.product.id, quantity)
+        .pipe(map(() => {
+          // const index = this.basket.orderedProducts.findIndex(od => od.product.id === product.id)
+          this.basket.orderedProducts[index].quantity = qty;
+          // this.recipesChanged.next(this.basket)
+        }));
     }
-    return this.http.put(this.baseUrl + "orders/edit-item/" + od.product.id, quantity)
-      .pipe(map(() => {
-        const index = this.basket.orderedProducts.indexOf(od);
-        // const index = this.basket.orderedProducts.findIndex(od => od.product.id === product.id)
-        this.basket.orderedProducts[index].quantity = qty;
-        // this.recipesChanged.next(this.basket)
-      }));
   }
 }
