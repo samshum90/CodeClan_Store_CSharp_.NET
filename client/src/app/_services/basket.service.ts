@@ -4,18 +4,22 @@ import { of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Order } from '../_models/order';
+import { OrderedProducts } from '../_models/orderedProducts';
 import { Product } from '../_models/product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BasketService {
-  basket = new Subject<Order>();
+  basketChanged = new Subject<Order>();
+  baseUrl = environment.apiUrl;
+  private basket!: Order;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   setBasket(basket: Order) {
-    this.basket.next(basket);
+    this.basket = basket;
+    this.basketChanged.next(basket);
   }
 
   getBasket() {
@@ -36,7 +40,23 @@ export class BasketService {
   // }
 
   deleteBasket() {
-    this.basket.next();
+    this.basketChanged.next();
   }
 
+  addProduct(orderedProduct: OrderedProducts) {
+    return this.http.post(this.baseUrl + "orders", orderedProduct)
+      // .pipe(map((res: any) => {
+      //   this.basket.orderedProducts.push(res);
+      //   this.basketChanged.next(this.basket);
+      //   console.log(this.basket)
+      // }));
+      .subscribe(
+        (res: any) => {                           //Next callback
+          this.basket.orderedProducts.push(res);
+          this.basketChanged.next(this.basket);
+        },
+        (error) => {
+          console.error(error);
+        })
+  }
 }

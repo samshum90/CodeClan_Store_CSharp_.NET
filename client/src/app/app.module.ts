@@ -26,6 +26,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { SideBasketListComponent } from './side-basket/side-basket-list/side-basket-list.component';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,10 @@ import { SideBasketListComponent } from './side-basket/side-basket-list/side-bas
     MatTableModule,
   ],
   entryComponents: [ProductDetailComponent],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

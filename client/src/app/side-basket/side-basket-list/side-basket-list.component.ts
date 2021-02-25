@@ -29,17 +29,15 @@ export class SideBasketListComponent implements OnInit {
   }
 
   loadBasket() {
-    this.subscription = this.basketService.basket
+    this.subscription = this.basketService.basketChanged
       .subscribe(
         (basket: Order) => {
           this.basket = basket;
         }
       );
-    if (!!this.user) {
-      this.dataStorageService.fetchBasket().subscribe(products => {
-        this.basket = products;
-        this.dataSource = new MatTableDataSource(products.orderedProducts);
-      })
+    this.basket = this.basketService.getBasket();
+    if (this.basket.orderedProducts != null) {
+      this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
     }
   }
 
@@ -51,3 +49,4 @@ export class SideBasketListComponent implements OnInit {
     return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
   }
 }
+

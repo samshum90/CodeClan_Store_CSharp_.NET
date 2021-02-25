@@ -92,7 +92,7 @@ namespace API.Controllers
                 Quantity = orderedProductsDto.Quantity
             };
             _unitOfWork.OrderRepository.CreateOrderedProducts( orderedProducts);
-            if (await _unitOfWork.Complete()) return Ok();
+            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<OrderedProductsDto>(orderedProducts));
 
             return BadRequest("Failed to create basket");
         }

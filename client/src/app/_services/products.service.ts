@@ -22,17 +22,4 @@ export class ProductsService {
     return this.http.get<Product>(this.baseUrl + "products/" + productname);
   }
 
-  addProduct(orderedProduct: OrderedProducts) {
-    return this.http.post(this.baseUrl + "orders", orderedProduct)
-      .subscribe(
-        (res) => {                           //Next callback
-          console.log('response received')
-          console.log(res);
-        },
-        (error) => {                              //Error callback
-          console.error('error caught in component')
-          console.error(error);
-        }
-      )
-  }
 }

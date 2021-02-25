@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrderedProducts } from 'src/app/_models/orderedProducts';
 import { Product } from 'src/app/_models/product';
-import { ProductsService } from 'src/app/_services/products.service';
+import { BasketService } from 'src/app/_services/basket.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,7 +14,7 @@ export class ProductDetailComponent implements OnInit {
   orderedProduct!: OrderedProducts;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { product: Product },
-    private productsService: ProductsService) { }
+    private basketService: BasketService) { }
 
   ngOnInit(): void {
   }
@@ -34,7 +34,7 @@ export class ProductDetailComponent implements OnInit {
       quantity: this.quantity
     }
 
-    this.productsService.addProduct(this.orderedProduct);
+    this.basketService.addProduct(this.orderedProduct);
   }
 
 }
