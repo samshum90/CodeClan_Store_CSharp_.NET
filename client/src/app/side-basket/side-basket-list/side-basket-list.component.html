@@ -4,7 +4,7 @@
         <svg-icon src="../../../assets/cart.svg" class="sideBasket__logo-icon"></svg-icon>
     </div>
 
-    <div *ngIf="basket?.orderedProducts?.length! > 0 ">
+    <div *ngIf="!!basket && basket?.orderedProducts?.length! > 0 ">
         <h2 class="sideBasket__title">Order</h2>
         <table mat-table [dataSource]="dataSource" class="sideBasket__table">
             <ng-container matColumnDef="photo">
@@ -24,7 +24,15 @@
 
             <ng-container matColumnDef="quantity">
                 <th class="sideBasket__table-header" mat-header-cell *matHeaderCellDef>Qty</th>
-                <td class="sideBasket__table-item" mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                <td class="sideBasket__table-item" mat-cell *matCellDef="let element">
+                    <mat-form-field class="sideBasket__table-item-select">
+                        <mat-select [(value)]="element.quantity">
+                            <mat-option *ngFor="let number of numbers" [value]="number">
+                                {{number}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
                 <td class="sideBasket__table-footer" mat-footer-cell *matFooterCellDef> {{getTotalQty()}} </td>
             </ng-container>
 

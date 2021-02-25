@@ -51,8 +51,10 @@ export class BasketService {
       //   console.log(this.basket)
       // }));
       .subscribe(
-        (res: any) => {                           //Next callback
-          this.basket.orderedProducts.push(res);
+        (res: any) => {
+          if (!!this.basket) {
+            this.basket.orderedProducts.push(res);
+          }
           this.basketChanged.next(this.basket);
         },
         (error) => {

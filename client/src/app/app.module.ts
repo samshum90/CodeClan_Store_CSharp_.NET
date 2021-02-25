@@ -15,6 +15,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -57,6 +58,7 @@ import { ErrorInterceptor } from './_interceptors/error.interceptor';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
+    MatSelectModule
   ],
   entryComponents: [ProductDetailComponent],
   providers: [

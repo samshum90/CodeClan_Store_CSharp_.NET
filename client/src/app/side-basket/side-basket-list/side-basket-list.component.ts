@@ -19,6 +19,18 @@ export class SideBasketListComponent implements OnInit {
   user!: User;
   displayedColumns: string[] = ['photo', 'name', 'quantity', 'price'];
   dataSource!: MatTableDataSource<any>;
+  numbers: number[] = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+  ];
+  newQty!: number;
 
   constructor(public basketService: BasketService, public dataStorageService: DataStorageService, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
@@ -31,12 +43,12 @@ export class SideBasketListComponent implements OnInit {
   loadBasket() {
     this.subscription = this.basketService.basketChanged
       .subscribe(
-        (basket: Order) => {
-          this.basket = basket;
+        (basketChanged: Order) => {
+          this.basket = basketChanged;
         }
       );
     this.basket = this.basketService.getBasket();
-    if (this.basket.orderedProducts != null) {
+    if (!!this.basket) {
       this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
     }
   }
