@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Order } from '../_models/order';
 import { OrderedProducts } from '../_models/orderedProducts';
 import { Product } from '../_models/product';
+import { Quantity } from '../_models/quantity';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,18 @@ export class BasketService {
         (error) => {
           console.error(error);
         })
+  }
+
+  updateProduct(qty: number, od: OrderedProducts) {
+    const quantity: Quantity = {
+      quantity: qty,
+    }
+    return this.http.put(this.baseUrl + "orders/edit-item/" + od.product.id, quantity)
+      .pipe(map(() => {
+        const index = this.basket.orderedProducts.indexOf(od);
+        // const index = this.basket.orderedProducts.findIndex(od => od.product.id === product.id)
+        this.basket.orderedProducts[index].quantity = qty;
+        // this.recipesChanged.next(this.basket)
+      }));
   }
 }

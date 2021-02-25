@@ -26,7 +26,7 @@
                 <th class="sideBasket__table-header" mat-header-cell *matHeaderCellDef>Qty</th>
                 <td class="sideBasket__table-item" mat-cell *matCellDef="let element">
                     <mat-form-field class="sideBasket__table-item-select">
-                        <mat-select [(value)]="element.quantity">
+                        <mat-select [(value)]="element.quantity" (selectionChange)="selectQty($event, element)">
                             <mat-option *ngFor="let number of numbers" [value]="number">
                                 {{number}}
                             </mat-option>
@@ -46,7 +46,8 @@
 
             <ng-container matColumnDef="button">
                 <td mat-footer-cell *matFooterCellDef colspan="4">
-                    <button class="sideBasket__table-button" mat-raised-button color="primary">Checkout</button>
+                    <button class="sideBasket__table-button" mat-raised-button color="primary"
+                        type="button">Checkout</button>
                 </td>
             </ng-container>
 

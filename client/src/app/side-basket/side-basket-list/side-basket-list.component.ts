@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { MatSelectChange } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Order } from 'src/app/_models/order';
+import { OrderedProducts } from 'src/app/_models/orderedProducts';
+import { Product } from 'src/app/_models/product';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { BasketService } from 'src/app/_services/basket.service';
@@ -54,11 +57,18 @@ export class SideBasketListComponent implements OnInit {
   }
 
   getTotalCost() {
-    return this.basket.orderedProducts.map(op => op.product.salePrice).reduce((acc, value) => acc + parseFloat(value), 0);
+    return this.basket.orderedProducts.map(op => parseFloat(op.product.salePrice) * op.quantity)
+      .reduce((acc, value) => acc + value, 0);
   }
 
   getTotalQty() {
     return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+  }
+
+  selectQty(event: MatSelectChange, od: OrderedProducts) {
+    this.basketService.updateProduct(event.value, od).subscribe(() => this.getTotalCost());
+
+    // this.newQty = parseInt((event.target as HTMLSelectElement).value);
   }
 }
 

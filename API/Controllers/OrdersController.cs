@@ -138,12 +138,12 @@ namespace API.Controllers
 
             _mapper.Map(quantityDto, orderedProducts );
 
-
             if (await _unitOfWork.Complete()) return NoContent();
             
             return BadRequest("Failed to update products in order");
 
         }
+
         [HttpPut("complete/{id}")]
          public async Task<ActionResult> CompleteOrder( int id)
         {
