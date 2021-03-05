@@ -12,7 +12,10 @@ namespace API.DTOs
         public string LastName { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
+        public int ContactNumber { get; set; }
         public string Address { get; set; }
+        public string Postcode { get; set; }
+        public string Notes { get; set; }
         public ICollection Orders { get; set; }
         public OrderDto Basket { get; set; }
     }

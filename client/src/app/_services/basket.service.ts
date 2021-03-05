@@ -27,8 +27,12 @@ export class BasketService {
     return this.basket;
   }
 
-  getNumberOfItems() {
-    return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+  getNumberOfItems(): number {
+    if (!!this.basket) {
+      return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+    } else {
+      return 0;
+    }
   }
   // addBasket(basket: Product) {
   //   this.basket.push(basket);
@@ -47,8 +51,7 @@ export class BasketService {
   addProduct(orderedProduct: OrderedProducts) {
     return this.http.post(this.baseUrl + "orders", orderedProduct)
       .pipe(map((res: any) => {
-        this.basket.orderedProducts.push(res);
-        this.basketChanged.next(this.basket);
+        this.basketChanged.next(res);
       }));
     // .subscribe(
     //   (res: any) => {

@@ -63,6 +63,9 @@ namespace API.Controllers
                 Created = user.Created,
                 LastActive = user.LastActive,
                 Address = user.Address,
+                ContactNumber = user.ContactNumber,
+                Postcode = user.Postcode,
+                Notes = user.Notes,
             };
         }
 
@@ -89,6 +92,9 @@ namespace API.Controllers
                 Created = user.Created,
                 LastActive = user.LastActive,
                 Address = user.Address,
+                ContactNumber = user.ContactNumber,
+                Postcode = user.Postcode,
+                Notes = user.Notes,
             };
         }
     }

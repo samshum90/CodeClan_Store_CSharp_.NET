@@ -65,8 +65,19 @@ namespace API.Controllers
         public async Task<ActionResult<OrderDto>> AddProduct( [FromBody] OrderedProductsDto orderedProductsDto)
         {
             var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            };
             var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
             var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
+
+            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(orderedProductsDto.Product.Id);
+
+            if (product == null)
+            {
+                return NotFound("Item not found");
+            }
 
             if (order == null)
             {
@@ -78,12 +89,6 @@ namespace API.Controllers
                     };
                  _unitOfWork.OrderRepository.CreateOrder(order);
             }
-            var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(orderedProductsDto.Product.Id);
-
-            if (product == null)
-            {
-                return NotFound("Item not found");
-            }
 
             OrderedProducts orderedProducts = new OrderedProducts
             {
@@ -92,7 +97,7 @@ namespace API.Controllers
                 Quantity = orderedProductsDto.Quantity
             };
             _unitOfWork.OrderRepository.CreateOrderedProducts( orderedProducts);
-            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<OrderedProductsDto>(orderedProducts));
+            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<CustomerOrderDto>(order));
 
             return BadRequest("Failed to create basket");
         }

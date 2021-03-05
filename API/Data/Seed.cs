@@ -51,7 +51,9 @@ namespace API.Data
                 LastName = "Jones",
                 Created = new DateTime(2021, 01, 01),
                 LastActive = new DateTime(2021, 01, 01),
-                Address = "123 Fake Street"
+                Address = "123 Fake Street",
+        ContactNumber = 12345678
+
             };
             await userManager.CreateAsync(customer, "Pa22word");
             await userManager.AddToRolesAsync(customer, new[] { "Customer" });

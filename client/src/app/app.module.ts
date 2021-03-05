@@ -28,6 +28,7 @@ import { RegisterComponent } from './register/register.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { SideBasketListComponent } from './side-basket/side-basket-list/side-basket-list.component';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ErrorInterceptor } from './_interceptors/error.interceptor';
     LoginComponent,
     RegisterComponent,
     SideBasketListComponent,
+    CheckoutComponent,
   ],
   imports: [
     BrowserModule,

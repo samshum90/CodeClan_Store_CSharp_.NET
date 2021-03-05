@@ -12,7 +12,10 @@ namespace API.Entities
         public string LastName { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime LastActive { get; set; } = DateTime.Now;
+        public int ContactNumber { get; set; }
         public string Address { get; set; }
+        public string Postcode { get; set; }
+        public string Notes { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
     }

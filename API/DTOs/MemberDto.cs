@@ -10,6 +10,9 @@ namespace API.DTOs
         public DateTime DoB { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int ContactNumber { get; set; }
         public string Address { get; set; }
+        public string Postcode { get; set; }
+        public string Notes { get; set; }
     }
 }
