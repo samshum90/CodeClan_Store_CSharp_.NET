@@ -33,7 +33,9 @@
                         </mat-select>
                     </mat-form-field>
                 </td>
-                <td class="sideBasket__table-footer" mat-footer-cell *matFooterCellDef> {{getTotalQty()}} </td>
+                <td class="sideBasket__table-footer" mat-footer-cell *matFooterCellDef>
+                    {{numberOfItems}}
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="price">

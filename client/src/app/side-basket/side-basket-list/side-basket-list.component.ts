@@ -35,6 +35,7 @@ export class SideBasketListComponent implements OnInit, OnDestroy {
     9,
   ];
   newQty!: number;
+  numberOfItems!: number;
 
   constructor(public basketService: BasketService, public dataStorageService: DataStorageService, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
@@ -54,18 +55,24 @@ export class SideBasketListComponent implements OnInit, OnDestroy {
       );
     this.basket = this.basketService.getBasket();
     if (!!this.basket) {
-      this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
       this.getTotalQty();
+      this.dataSource = new MatTableDataSource(this.basket.orderedProducts);
+
     }
   }
 
   getTotalCost(): number {
+    this.getTotalQty();
     return this.basket.orderedProducts.map(op => parseFloat(op.product.salePrice) * op.quantity)
       .reduce((acc, value) => acc + value, 0);
   }
 
-  getTotalQty(): number {
-    return this.basketService.getNumberOfItems();
+  getTotalQty() {
+    this.basketService.numOfItems.subscribe(
+      (number: number) => {
+        this.numberOfItems = number;
+      }
+    );
   }
 
   selectQty(event: MatSelectChange, od: OrderedProducts) {

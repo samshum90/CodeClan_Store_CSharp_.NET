@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Order } from '../_models/order';
@@ -15,33 +15,29 @@ export class BasketService {
   basketChanged = new Subject<Order>();
   baseUrl = environment.apiUrl;
   private basket!: Order;
+  numOfItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) { }
 
   setBasket(basket: Order) {
     this.basket = basket;
     this.basketChanged.next(basket);
+    this.numOfItems.next(basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0));
   }
 
   getBasket() {
     return this.basket;
   }
 
-  getNumberOfItems(): number {
-    if (!!this.basket) {
-      return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
-    } else {
-      return 0;
-    }
-  }
-  // addBasket(basket: Product) {
-  //   this.basket.push(basket);
-  //   this.basketChanged.next(this.basket.slice())
+  // getNumberOfItems() {
+  //   if (!!this.basket) {
+  //     this.numOfItems.next(this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0));
+  //   }
+  // if (!!this.basket) {
+  //   return this.basket.orderedProducts.map(op => op.quantity).reduce((acc, value) => acc + value, 0);
+  // } else {
+  //   return 0;
   // }
-
-  // updateBasket(index: number, newProduct: Product) {
-  //   this.basket[index] = newProduct
-  //   this.basketChanged.next(this.basket.slice())
   // }
 
   deleteBasket() {
@@ -51,7 +47,8 @@ export class BasketService {
   addProduct(orderedProduct: OrderedProducts) {
     return this.http.post(this.baseUrl + "orders", orderedProduct)
       .pipe(map((res: any) => {
-        this.basketChanged.next(res);
+        this.setBasket(res)
+        // this.basketChanged.next(res);
       }));
     // .subscribe(
     //   (res: any) => {
@@ -71,6 +68,7 @@ export class BasketService {
       return this.http.delete(this.baseUrl + "orders/delete-item/" + od.product.id)
         .pipe(map(() => {
           this.basket.orderedProducts.splice(index, 1);
+          this.setBasket(this.basket)
         }))
     } else {
       const quantity: Quantity = {
@@ -80,7 +78,8 @@ export class BasketService {
         .pipe(map(() => {
           // const index = this.basket.orderedProducts.findIndex(od => od.product.id === product.id)
           this.basket.orderedProducts[index].quantity = qty;
-          this.basketChanged.next(this.basket)
+          // this.basketChanged.next(this.basket)
+          this.setBasket(this.basket)
         }));
     }
   }

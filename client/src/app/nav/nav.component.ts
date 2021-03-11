@@ -9,16 +9,21 @@ import { BasketService } from '../_services/basket.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
+  numberOfItems!: number;
 
   constructor(public accountService: AccountService, private router: Router, public basketService: BasketService) {
   }
 
   ngOnInit(): void {
-
+    this.getTotalQty();
   }
 
-  getTotalQty(): number {
-    return this.basketService.getNumberOfItems();
+  getTotalQty() {
+    this.basketService.numOfItems.subscribe(
+      (number: number) => {
+        this.numberOfItems = number;
+      }
+    );
   }
 
   logout() {
