@@ -33,9 +33,6 @@ export class ProductDetailComponent implements OnInit {
       product: this.data.product,
       quantity: this.quantity
     }
-
     this.basketService.addProduct(this.orderedProduct)
-      .subscribe();
   }
-
 }

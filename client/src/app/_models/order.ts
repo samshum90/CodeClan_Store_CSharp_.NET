@@ -1,8 +1,8 @@
 import { OrderedProducts } from "./orderedProducts";
 
 export interface Order {
-    id: number;
+    id?: number;
     orderCreated: string;
-    orderDate: string;
+    orderDate?: string;
     orderedProducts: OrderedProducts[];
 }

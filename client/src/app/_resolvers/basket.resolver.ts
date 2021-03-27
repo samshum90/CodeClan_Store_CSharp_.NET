@@ -29,6 +29,12 @@ export class BasketResolver implements Resolve<Order> {
       } else {
         return basket;
       }
+    } else {
+      if (localStorage.getItem("basket") === null) {
+        return this.dataStorageService.setNewLocalStorageBasket();
+      } else {
+        return this.dataStorageService.setLocalStorageBasket();
+      }
     }
   }
 }

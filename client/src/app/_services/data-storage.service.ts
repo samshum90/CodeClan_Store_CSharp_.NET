@@ -14,13 +14,27 @@ export class DataStorageService {
   constructor(private http: HttpClient, private basketService: BasketService) { }
 
   fetchBasket() {
-
     return this.http
       .get<Order>(this.baseUrl + 'orders/basket')
       .pipe(map(res => {
         this.basketService.setBasket(res);
         return res;
       }))
+  }
 
+  setNewLocalStorageBasket() {
+    const basket: Order = {
+      orderCreated: new Date().toString(),
+      orderedProducts: []
+    };
+    localStorage.setItem('basket', JSON.stringify(basket));
+    this.basketService.setBasket(basket);
+    return basket;
+  }
+
+  setLocalStorageBasket() {
+    const basket = localStorage.getItem("basket");
+    this.basketService.setBasket(JSON.parse(basket));
+    return JSON.parse(basket);
   }
 }
