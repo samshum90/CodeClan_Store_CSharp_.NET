@@ -19,7 +19,6 @@ import { DataStorageService } from 'src/app/_services/data-storage.service';
 export class SideBasketListComponent implements OnInit, OnDestroy {
   basket!: Order;
   subscription!: Subscription;
-  user!: User;
   displayedColumns: string[] = ['photo', 'name', 'quantity', 'price'];
   dataSource!: MatTableDataSource<any>;
   numbers: number[] = [
@@ -37,8 +36,7 @@ export class SideBasketListComponent implements OnInit, OnDestroy {
   newQty!: number;
   numberOfItems!: number;
 
-  constructor(public basketService: BasketService, public dataStorageService: DataStorageService, private accountService: AccountService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
+  constructor(public basketService: BasketService, public dataStorageService: DataStorageService) {
   }
 
   ngOnInit(): void {

@@ -36,8 +36,7 @@
                 <span class="nav__bar-link-text">LOGOUT</span>
             </a>
         </li>
-        <li class="nav__bar-item" *ngIf="
-        (accountService.currentUser$ | async) === undefined || (accountService.currentUser$ | async) === null">
+        <li class="nav__bar-item" *ngIf="(accountService.currentUser$ | async) === null">
             <a class="nav__bar-link" routerLink='/login'>
                 <mat-icon class="material-icons-outlined nav__bar-link-icon" aria-hidden="false"
                     aria-label="Account icon">

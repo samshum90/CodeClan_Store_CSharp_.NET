@@ -5,7 +5,10 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Order } from '../_models/order';
+import { User } from '../_models/user';
+import { AccountService } from '../_services/account.service';
 import { BasketService } from '../_services/basket.service';
 import { DataStorageService } from '../_services/data-storage.service';
 
@@ -13,14 +16,19 @@ import { DataStorageService } from '../_services/data-storage.service';
   providedIn: 'root'
 })
 export class BasketResolver implements Resolve<Order> {
-  constructor(private dataStorageService: DataStorageService, private basketService: BasketService) { }
+  user!: User;
+  constructor(private dataStorageService: DataStorageService, private basketService: BasketService, private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
+  }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const basket = this.basketService.getBasket();
-    if (!basket) {
-      return this.dataStorageService.fetchBasket();
-    } else {
-      return basket;
+    if (!!this.user) {
+      const basket = this.basketService.getBasket();
+      if (!basket) {
+        return this.dataStorageService.fetchBasket();
+      } else {
+        return basket;
+      }
     }
   }
 }
