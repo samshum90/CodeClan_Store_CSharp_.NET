@@ -8,6 +8,7 @@ namespace API.DTOs
     {
         public int Id { get; set; }
         public DateTime OrderCreated { get; set; }
+        public DateTime LastUpdate { get; set; }
         public DateTime OrderDate { get; set; }
         public string Status { get; set; }
         public MemberDto AppUser { get; set; }

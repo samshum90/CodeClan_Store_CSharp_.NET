@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [ServiceFilter(typeof(LogProductActivity))]
     [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
@@ -65,10 +67,10 @@ namespace API.Controllers
         public async Task<ActionResult<OrderDto>> AddProduct( [FromBody] OrderedProductsDto orderedProductsDto)
         {
             var userId = User.GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized();
-            };
+            // if (userId == null)
+            // {
+            //     return Unauthorized();
+            // };
             var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
             var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
 
@@ -139,7 +141,7 @@ namespace API.Controllers
             if (order == null) return NotFound("Failed to find an open order");
 
             var orderedProducts = await _unitOfWork.OrderRepository.GetOrderedProductsByProductIdAndOrderIdAsync(itemId, order.Id);
-             if (orderedProducts == null) return NotFound("Failed to find an ordered product");
+            if (orderedProducts == null) return NotFound("Failed to find an ordered product");
 
             _mapper.Map(quantityDto, orderedProducts );
 

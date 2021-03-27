@@ -24,7 +24,8 @@ export class DataStorageService {
 
   setNewLocalStorageBasket() {
     const basket: Order = {
-      orderCreated: new Date().toString(),
+      orderCreated: new Date(),
+      lastUpdate: new Date(),
       orderedProducts: []
     };
     localStorage.setItem('basket', JSON.stringify(basket));
