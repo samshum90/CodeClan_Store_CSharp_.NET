@@ -39,6 +39,15 @@ export class BasketService {
     localStorage.removeItem('basket');
   }
 
+  updateBasket(basket: Order) {
+    this.http.post<Order>(this.baseUrl + "update", basket)
+      .subscribe(
+        (res: any) => {
+          this.setBasket(res);
+          localStorage.setItem('basket', JSON.stringify(res));
+        })
+  }
+
   addProduct(orderedProduct: OrderedProducts) {
     if (!!this.user) {
       this.http.post(this.baseUrl + "orders", orderedProduct)
@@ -55,6 +64,7 @@ export class BasketService {
           })
     } else {
       this.basket.orderedProducts.push(orderedProduct);
+      this.basket.lastUpdate = new Date();
       this.setBasket(this.basket);
       localStorage.setItem('basket', JSON.stringify(this.basket));
     }
@@ -90,6 +100,7 @@ export class BasketService {
       } else {
         this.basket.orderedProducts[index].quantity = qty;
       }
+      this.basket.lastUpdate = new Date();
       this.setBasket(this.basket);
       localStorage.setItem('basket', JSON.stringify(this.basket));
       return of();

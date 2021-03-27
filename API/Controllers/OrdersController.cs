@@ -104,6 +104,26 @@ namespace API.Controllers
             return BadRequest("Failed to create basket");
         }
 
+        [HttpPost("update")]
+        public async Task<ActionResult<OrderDto>> updateOrder( [FromBody] LocalStorageOrderDto orderDto)
+        {
+            var userId = User.GetUserId();
+ 
+            var appUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            var order = await _unitOfWork.OrderRepository.GetOpenOrderByAppUserIdAsync(userId);
+            if (order == null) return NotFound("Failed to find an open order");
+
+            var orderedProducts = _mapper.Map<OrderedProducts>(orderDto.OrderedProducts);
+            order.OrderedProducts = order.OrderedProducts.AddRange(orderedProducts);
+            _mapper.Map(orderDto, order);
+
+            _unitOfWork.OrderRepository.Update(order);
+
+            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<CustomerOrderDto>(order));
+
+            return BadRequest("Failed to update order");
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {

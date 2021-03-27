@@ -30,7 +30,8 @@ export class BasketResolver implements Resolve<Order> {
         return basket;
       }
     } else {
-      if (localStorage.getItem("basket") === null) {
+      const localBasket: Order = JSON.parse(localStorage.getItem("basket"));
+      if (localBasket === null || localBasket.orderedProducts.length === 0) {
         return this.dataStorageService.setNewLocalStorageBasket();
       } else {
         return this.dataStorageService.setLocalStorageBasket();
